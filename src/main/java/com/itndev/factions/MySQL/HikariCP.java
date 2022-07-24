@@ -62,7 +62,7 @@ public class HikariCP {
 
     public Connection getHikariConnection() {
         try {
-            if(connection != null || !connection.isClosed()) {
+            if(connection != null && !connection.isClosed()) {
                 return connection;
             } else {
                 try {
