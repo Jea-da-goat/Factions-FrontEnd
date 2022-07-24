@@ -1,0 +1,20 @@
+name: Factions
+version: '${project.version}'
+main: com.itndev.factions.Main
+api-version: 1.16
+depend: [ ProtocolLib, PlaceholderAPI, Vault, AdvancedBan ]
+authors: [ Itndev, Jea ]
+description: Faciton Server Plugin
+commands:
+  국가:
+    description: Faction Main Command
+  factionadmin:
+    description: Admin Commands
+  fa:
+    description: Admin Commands v2
+  연동:
+    description: discord auth command
+  연동정보:
+    description: discord auth into check command
+  연동해제:
+    description: discord auth remove command
