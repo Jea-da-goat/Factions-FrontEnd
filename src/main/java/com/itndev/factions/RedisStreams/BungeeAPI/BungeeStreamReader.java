@@ -12,39 +12,33 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class BungeeStreamReader {
 
     public static void RedisStreamReader() {
 
-        BukkitRunnable StreamReader = new BukkitRunnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        READ_OUTPUT_STREAM();
-                        Thread.sleep(5);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(RedisConnection.isClosed()) {
-                        break;
-                    }
+        new Thread(() -> {
+            while (true) {
+                try {
+                    READ_OUTPUT_STREAM();
+                    Thread.sleep(5);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                this.cancel();
-
+                if(RedisConnection.isClosed() || Main.ShutDown) {
+                    break;
+                }
             }
-        };
-        StreamReader.runTaskAsynchronously(Main.getInstance());
-
-
+        }).start();
         //String lastSeenMessage = "0-0";
-
     }
 
-    private static void READ_OUTPUT_STREAM() {
-        List<StreamMessage<String, String>> messages = RedisConnection.getRedisCommands().xread(
-                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_BUNGEE_LINE(), RedisConnection.get_LastID_BUNGEE()));
+    private static void READ_OUTPUT_STREAM() throws ExecutionException, InterruptedException, TimeoutException {
+        List<StreamMessage<String, String>> messages = RedisConnection.getAsyncRedisCommands().xread(
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_BUNGEE_LINE(), RedisConnection.get_LastID_BUNGEE())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);
 
         for (StreamMessage<String, String> message : messages) {
             RedisConnection.set_LastID_BUNGEE(message.getId());

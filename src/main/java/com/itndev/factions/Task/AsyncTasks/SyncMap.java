@@ -10,9 +10,8 @@ import java.util.HashMap;
 public class SyncMap {
 
     public void SyncStorageMap() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
+            while(true) {
                 HashMap<String, String> templands = (HashMap<String, String>) FactionStorage.LandToFaction.clone();
                 synchronized (FactionStorage.AsyncLandToFaction) {
                     FactionStorage.AsyncLandToFaction.clear();
@@ -28,20 +27,28 @@ public class SyncMap {
                         FactionStorage.AsyncOutPostToFaction.put(key, tempoutposts.get(key));
                     }
                 }
-
-
+                try {
+                    Thread.sleep(50);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(Main.ShutDown) {
+                    break;
+                }
             }
-        }.runTaskTimerAsynchronously(Main.getInstance(), 3L, 3L);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
+        }).start();
+        new Thread(() -> {
+            while(true) {
                 FactionList.FactionTopExecute(10L);
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException ignored) {
                 }
                 FactionList.BuildFactionTop();
+                if(Main.ShutDown) {
+                    break;
+                }
             }
-        }.runTaskTimerAsynchronously(Main.getInstance(), 100L, 2*20*60L);
+        }).start();
     }
 }

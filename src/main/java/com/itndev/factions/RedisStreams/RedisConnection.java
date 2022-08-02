@@ -12,6 +12,7 @@ import io.lettuce.core.RedisURI;
 import io.lettuce.core.StreamMessage;
 import io.lettuce.core.XReadArgs;
 import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.async.RedisAsyncCommands;
 import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.api.sync.RedisStreamCommands;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,11 +23,16 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class RedisConnection {
 
     private static RedisClient client = null;
     private static StatefulRedisConnection<String, String> connection = null;
+
+    private static RedisAsyncCommands<String, String> asyncCommands = null;
     private static RedisStreamCommands<String, String> commands = null;
     private static RedisCommands<String, String> setcommands = null;
     private static String LastID_OUTPUT = "0-0";
@@ -39,11 +45,6 @@ public class RedisConnection {
     private static Integer redis_port = 6374;
     private static String redis_password = "password";
     private static Boolean sslEnabled = false;
-
-    private static BukkitRunnable StreamInputWriter = null;
-    private static BukkitRunnable StreamInnerWriter = null;
-    private static BukkitRunnable StreamInner2Writer = null;
-    private static BukkitRunnable StreamReader = null;
 
     private static Boolean closed = false;
 
@@ -409,9 +410,6 @@ public class RedisConnection {
     }
 
     public static void RedisDisConnect() {
-        StreamReader.cancel();
-        StreamInputWriter.cancel();
-        StreamInnerWriter.cancel();
         connection.close();
         closed = true;
     }
@@ -430,55 +428,52 @@ public class RedisConnection {
         return commands;
     }
 
+    public static RedisAsyncCommands<String, String> getAsyncRedisCommands() {
+        if(asyncCommands == null) {
+            asyncCommands = getRedisConnection().async();
+        }
+        return asyncCommands;
+    }
+
     public static void RedisStreamReader() {
 
-        BukkitRunnable StreamReader = new BukkitRunnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        READ_OUTPUT_STREAM();
-                        READ_INNER_STREAM();
-                        Thread.sleep(5);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(closed) {
-                        break;
-                    }
+        new Thread(() -> {
+            while (true) {
+                try {
+                    READ_OUTPUT_STREAM();
+                    READ_INNER_STREAM();
+                    Thread.sleep(5);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                this.cancel();
+                if(closed) {
+                    break;
+                }
             }
-        };
-        StreamReader.runTaskAsynchronously(Main.getInstance());
+        }).start();
 
-        BukkitRunnable StreamAsyncINNER2Reader = new BukkitRunnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        READ_INNER2_STREAM();
-                        Thread.sleep(5);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(closed) {
-                        break;
-                    }
+        new Thread(() -> {
+            while (true) {
+                try {
+                    READ_INNER2_STREAM();
+                    Thread.sleep(5);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                this.cancel();
+                if(closed) {
+                    break;
+                }
             }
-        };
-        StreamAsyncINNER2Reader.runTaskAsynchronously(Main.getInstance());
+        }).start();
 
 
         //String lastSeenMessage = "0-0";
 
     }
 
-    private static void READ_OUTPUT_STREAM() {
-        List<StreamMessage<String, String>> messages = getRedisCommands().xread(
-                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_OUTPUT_NAME(), get_LastID_OUTPUT()));
+    private static void READ_OUTPUT_STREAM() throws ExecutionException, InterruptedException, TimeoutException {
+        List<StreamMessage<String, String>> messages = getAsyncRedisCommands().xread(
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_OUTPUT_NAME(), get_LastID_OUTPUT())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);;
 
         for (StreamMessage<String, String> message : messages) {
             set_LastID_OUTPUT(message.getId());
@@ -487,10 +482,9 @@ public class RedisConnection {
         }
     }
 
-    private static void READ_INNER_STREAM() {
-        List<StreamMessage<String, String>> messages = getRedisCommands().xread(
-                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT_NAME(), get_LastID_INNER()));
-
+    private static void READ_INNER_STREAM() throws ExecutionException, InterruptedException, TimeoutException {
+        List<StreamMessage<String, String>> messages = getAsyncRedisCommands().xread(
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT_NAME(), get_LastID_INNER())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);;
         for (StreamMessage<String, String> message : messages) {
             set_LastID_INNER(message.getId());
             String compressedhashmap = message.getBody().get(StaticVal.getCommand());
@@ -498,9 +492,9 @@ public class RedisConnection {
         }
     }
 
-    private static void READ_INNER2_STREAM() {
-        List<StreamMessage<String, String>> messages = getRedisCommands().xread(
-                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT2_NAME(), get_LastID_INNER2()));
+    private static void READ_INNER2_STREAM() throws ExecutionException, InterruptedException, TimeoutException {
+        List<StreamMessage<String, String>> messages = getAsyncRedisCommands().xread(
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT2_NAME(), get_LastID_INNER2())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);;
 
         for (StreamMessage<String, String> message : messages) {
             set_LastID_INNER2(message.getId());
@@ -529,83 +523,68 @@ public class RedisConnection {
     }
 
     public static void RedisStreamWriter() {
-        StreamInputWriter = new BukkitRunnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        String compressedhashmap;
-                        synchronized (JedisTempStorage.Temp_INPUT_MAP) {
-                            compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INPUT_MAP);
-                            JedisTempStorage.Temp_INPUT_MAP.clear();
-                        }
-                        if(compressedhashmap != null) {
-                            Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
-                            getRedisCommands().xadd(StreamConfig.get_Stream_INPUT_NAME(), body);
-                        }
-                        Thread.sleep(10);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+        new Thread(() -> {
+            while (true) {
+                try {
+                    String compressedhashmap;
+                    synchronized (JedisTempStorage.Temp_INPUT_MAP) {
+                        compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INPUT_MAP);
+                        JedisTempStorage.Temp_INPUT_MAP.clear();
                     }
-                    if(closed) {
-                        break;
+                    if(compressedhashmap != null) {
+                        Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
+                        getAsyncRedisCommands().xadd(StreamConfig.get_Stream_INPUT_NAME(), body);
                     }
+                    Thread.sleep(10);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                this.cancel();
-            }
-        };
-        StreamInputWriter.runTaskAsynchronously(Main.getInstance());
-        StreamInnerWriter = new BukkitRunnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        String compressedhashmap;
-                        synchronized (JedisTempStorage.Temp_INTERCONNECT_MAP) {
-                            compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INTERCONNECT_MAP);
-                            JedisTempStorage.Temp_INTERCONNECT_MAP.clear();
-                        }
-                        if(compressedhashmap != null) {
-                            Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
-                            getRedisCommands().xadd(StreamConfig.get_Stream_INTERCONNECT_NAME(), body);
-                        }
-                        Thread.sleep(10);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(closed) {
-                        break;
-                    }
+                if(closed) {
+                    break;
                 }
-                this.cancel();
             }
-        };
-        StreamInnerWriter.runTaskAsynchronously(Main.getInstance());
-        StreamInner2Writer = new BukkitRunnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        String compressedhashmap;
-                        synchronized (JedisTempStorage.Temp_INTERCONNECT2_MAP) {
-                            compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INTERCONNECT2_MAP);
-                            JedisTempStorage.Temp_INTERCONNECT2_MAP.clear();
-                        }
-                        if(compressedhashmap != null) {
-                            Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
-                            getRedisCommands().xadd(StreamConfig.get_Stream_INTERCONNECT2_NAME(), body);
-                        }
-                        Thread.sleep(10);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+        }).start();
+        new Thread(() -> {
+            while (true) {
+                try {
+                    String compressedhashmap;
+                    synchronized (JedisTempStorage.Temp_INTERCONNECT_MAP) {
+                        compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INTERCONNECT_MAP);
+                        JedisTempStorage.Temp_INTERCONNECT_MAP.clear();
                     }
-                    if(closed) {
-                        break;
+                    if(compressedhashmap != null) {
+                        Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
+                        getAsyncRedisCommands().xadd(StreamConfig.get_Stream_INTERCONNECT_NAME(), body);
                     }
+                    Thread.sleep(10);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                this.cancel();
+                if(closed) {
+                    break;
+                }
             }
-        };
-        StreamInner2Writer.runTaskAsynchronously(Main.getInstance());
+        }).start();
+        new Thread(() -> {
+            while (true) {
+                try {
+                    String compressedhashmap;
+                    synchronized (JedisTempStorage.Temp_INTERCONNECT2_MAP) {
+                        compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INTERCONNECT2_MAP);
+                        JedisTempStorage.Temp_INTERCONNECT2_MAP.clear();
+                    }
+                    if(compressedhashmap != null) {
+                        Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
+                        getAsyncRedisCommands().xadd(StreamConfig.get_Stream_INTERCONNECT2_NAME(), body);
+                    }
+                    Thread.sleep(10);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(closed) {
+                    break;
+                }
+            }
+        }).start();
     }
 }

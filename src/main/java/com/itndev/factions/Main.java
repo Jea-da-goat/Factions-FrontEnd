@@ -38,6 +38,8 @@ public class Main extends JavaPlugin {
 
     public static SystemUtils sysutils = new SystemUtils();
 
+    public static Boolean ShutDown = false;
+
     FileConfiguration config = getConfig();
     public final Logger logger = Logger.getLogger("Minecraft");
 
@@ -98,6 +100,7 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         ConfigIO.save();
         RegisterStuff.onShutdown();
+        ShutDown = true;
         RedisConnection.RedisDisConnect();
         try {
             hikariCP.getHikariConnection().close();
