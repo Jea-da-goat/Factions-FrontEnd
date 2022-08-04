@@ -17,6 +17,12 @@ public class BackendIO {
         JedisTempStorage.AddCommandToQueue_INPUT(CMD);
     }
 
+    public static void KeepAlive(String UUID, String Nothing) {
+        String CMD = CMD_SPLITTER;
+        CMD = CMD + Main.ServerName + CMD_SPLITTER + USER_Announce + UUID + CMD_SPLITTER + CMD_Announce + "KEEPALIVECHECK_REDISCLEANUP" + CMD_SPLITTER + ADD_Announce + Nothing + CMD_SPLITTER;
+        JedisTempStorage.AddCommandToQueue_INPUT(CMD);
+    }
+
     private static String Args2String_V(String[] args, String replacement) {
         String k = "";
         for(int c = 0; c < args.length; c++) {

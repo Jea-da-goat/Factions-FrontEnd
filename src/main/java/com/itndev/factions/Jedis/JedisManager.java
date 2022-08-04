@@ -5,6 +5,7 @@ import com.itndev.factions.Main;
 import com.itndev.factions.Storage.CachedStorage;
 import com.itndev.factions.Storage.FactionStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
+import com.itndev.factions.Utils.BackendIO;
 import com.itndev.factions.Utils.DiscordAuth.DiscordAuth;
 import com.itndev.factions.Utils.FactionUtils;
 import com.itndev.factions.Utils.JedisUtils;
@@ -302,6 +303,9 @@ public class JedisManager {
                 if(args[1].equalsIgnoreCase("auth")) {
                     DiscordAuth.AcceptAuthInfo(args[2], args[3]);
                 }
+            } else if(args[0].equalsIgnoreCase("keepalive")) {
+                String UUID = args[1];
+                BackendIO.KeepAlive(UUID, "BLABLABLA");
             } else {
                 System.out.println("[WARNING (REDIS)] WRONG COMMAND USAGE FROM REDIS" + " ( '" + k + "' )");
             }
