@@ -314,8 +314,8 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void OnJoinWarp(PlayerJoinEvent e) {
-        UserInfoStorage.onPlayerJoinEvent(e);
+    public void OnJoin(PlayerJoinEvent e) {
+        //UserInfoStorage.onPlayerJoinEvent(e);
         Player p = e.getPlayer();
         String uuid = p.getUniqueId().toString();
         if(!DiscordAuth.isAuth(uuid)) {
