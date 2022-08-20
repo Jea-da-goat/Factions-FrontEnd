@@ -47,7 +47,6 @@ public class Main extends JavaPlugin {
         return instance;
     }
 
-    @Deprecated
     @Override
     public void onEnable() {
         instance = this;
@@ -77,7 +76,6 @@ public class Main extends JavaPlugin {
         PingSQL();
     }
 
-    @Deprecated
     private static void PingSQL() {
         new Thread(() -> {
             while(true) {
@@ -95,7 +93,6 @@ public class Main extends JavaPlugin {
     }
 
 
-    @Deprecated
     @Override
     public void onDisable() {
         ConfigIO.save();

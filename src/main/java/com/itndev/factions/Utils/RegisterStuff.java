@@ -20,7 +20,6 @@ import java.util.Objects;
 public class RegisterStuff {
 
 
-    @Deprecated
     public static void onStartup() {
         FactionStorageIOManager.restoreFactionInfo();
         UserInfoStorageIOManager.restoreUserInfo();
@@ -36,7 +35,6 @@ public class RegisterStuff {
         DiscordAuth.LoopCheckAuth();
     }
 
-    @Deprecated
     public static void onShutdown() {
         FactionStorageIOManager.SaveFactionInfo();
         UserInfoStorageIOManager.SaveUserInfo();

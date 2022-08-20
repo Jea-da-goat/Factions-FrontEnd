@@ -302,7 +302,7 @@ public class PlayerListener implements Listener {
         if(e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             Player attacker = (Player) e.getDamager();
             Player victem = (Player) e.getEntity();
-            if(FactionUtils.isSameFaction(attacker.getUniqueId().toString(), victem.getUniqueId().toString())) {
+            if(FactionUtils.isSameFaction(attacker.getUniqueId(), victem.getUniqueId())) {
                 e.setCancelled(true);
                 SystemUtils.sendmessage(attacker, "&4&l⚠ &r&c국가원들끼리의 전투는 금지되어 있습니다");
                 return;
@@ -365,7 +365,7 @@ public class PlayerListener implements Listener {
             return;
         }
         k = k.stripTrailing();
-        k = k.stripTrailing();
+        k = k.stripLeading();
 
         Main.sysutils.MainChatProcced(p , UUID, k);
             /*try {

@@ -4,6 +4,7 @@ import com.itndev.factions.Main;
 import com.itndev.factions.Storage.FactionStorage;
 import com.itndev.factions.Utils.FactionUtils;
 import com.itndev.factions.Utils.SystemUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,7 +20,6 @@ import java.util.List;
 
 public class FactionWarpMenu {
 
-    @Deprecated
     public static void SendFactionWarpMenu(Player sender, String UUID, String[] args) {
         new Thread( () -> {
             if(!FactionUtils.isInFaction(UUID)) {
@@ -27,7 +27,7 @@ public class FactionWarpMenu {
                 return;
             }
 
-            Inventory inv = Bukkit.createInventory(sender, 54, ChatColor.translateAlternateColorCodes('&', "&3&l[ &r&f국가 워프메뉴 &3&l]"));
+            Inventory inv = Bukkit.createInventory(sender, 54, Component.text(ChatColor.translateAlternateColorCodes('&', "&3&l[ &r&f국가 워프메뉴 &3&l]")));
             //ArrayList<Integer> exp = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
             //ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
             //ItemMeta glassmeta = glass.getItemMeta();
@@ -50,14 +50,13 @@ public class FactionWarpMenu {
 
     }
 
-    @Deprecated
     private static ItemStack getWarpClickItem(String FactionOutPostName) {
         ItemStack beaconwarp = new ItemStack(Material.BEACON);
         ItemMeta meta = beaconwarp.getItemMeta();
-        meta.setDisplayName(SystemUtils.colorize("&3&l[&r&f " + FactionOutPostName + " &r&3&l]"));
-        List<String> lore = new ArrayList<>();
-        lore.add(SystemUtils.colorize("&r국가 전초기지 워프"));
-        meta.setLore(lore);
+        meta.displayName(Component.text(SystemUtils.colorize("&3&l[&r&f " + FactionOutPostName + " &r&3&l]")));
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text(SystemUtils.colorize("&r국가 전초기지 워프")));
+        meta.lore(lore);
         beaconwarp.setItemMeta(meta);
         return beaconwarp;
     }

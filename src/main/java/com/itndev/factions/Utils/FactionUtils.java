@@ -511,13 +511,24 @@ public class FactionUtils {
         return null;
     }
 
-    public static String getPlayerFactionUUID(String UUID) {
+
+    //=====================================================
+    //                 Get FactionUUID of Player
+    public static String getPlayerFactionUUID(String uuid) {
         String finalUUID = null;
-        if(FactionStorage.PlayerFaction.containsKey(UUID)) {
-            finalUUID = FactionStorage.PlayerFaction.get(UUID);
+        if(FactionStorage.PlayerFaction.containsKey(uuid)) {
+            finalUUID = FactionStorage.PlayerFaction.get(uuid);
         }
         return finalUUID;
     }
+    public static String getPlayerFactionUUID(UUID uuid) {
+        String finalUUID = null;
+        if(FactionStorage.PlayerFaction.containsKey(uuid.toString())) {
+            finalUUID = FactionStorage.PlayerFaction.get(uuid.toString());
+        }
+        return finalUUID;
+    }
+    //=====================================================
 
     public static String getFactionName(String FactionUUID) {
         String finalname = null;
@@ -642,16 +653,33 @@ public class FactionUtils {
         return FactionStorage.LandToFaction.containsKey(getChunkKey(loc));
     }
 
-    public static Boolean isInFaction(String UUID) {
-        return FactionStorage.PlayerFaction.containsKey(UUID);
-    }
 
+    //=============================================================
+    //                   IS IN FACTION
+    public static Boolean isInFaction(String uuid) {
+        return FactionStorage.PlayerFaction.containsKey(uuid);
+    }
+    public static Boolean isInFaction(UUID uuid) {
+        return FactionStorage.PlayerFaction.containsKey(uuid.toString());
+    }
+    //=============================================================
+
+
+    //=============================================================
+    //                     IS SAME FACTION
     public static Boolean isSameFaction(String UUID, String UUID2) {
         if(isInFaction(UUID) && isInFaction(UUID2)) {
             return (getPlayerFactionUUID(UUID).equalsIgnoreCase(getPlayerFactionUUID(UUID2)));
         }
         return false;
     }
+    public static Boolean isSameFaction(UUID uuid, UUID uuid2) {
+        if(isInFaction(uuid) && isInFaction(uuid)) {
+            return (getPlayerFactionUUID(uuid).equalsIgnoreCase(getPlayerFactionUUID(uuid2)));
+        }
+        return false;
+    }
+    //=============================================================
 
     public static String AsyncWhosClaim(Location loc) {
         if(FactionStorage.AsyncLandToFaction.containsKey(getChunkKey(loc))) {

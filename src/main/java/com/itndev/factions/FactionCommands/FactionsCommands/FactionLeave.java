@@ -10,6 +10,10 @@ import org.bukkit.entity.Player;
 public class FactionLeave {
 
     public static void FactionLeave(Player sender, String UUID, String[] args) {
+        if(!FactionUtils.isInFaction(UUID)) {
+            SystemUtils.sendfactionmessage(sender, "&r&f당신은 소속된 국가가 없습니다");
+            return;
+        }
         BackendIO.SendCMD_BACKEND(UUID, args, "LEAVE_FACTION");
     }
 }

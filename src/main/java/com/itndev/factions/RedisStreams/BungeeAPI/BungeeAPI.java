@@ -1,5 +1,9 @@
 package com.itndev.factions.RedisStreams.BungeeAPI;
 
+import com.itndev.factions.Utils.UserInfoUtils;
+
+import java.util.ArrayList;
+
 public class BungeeAPI {
 
     public static Boolean isOnline(String UUID) {
@@ -16,5 +20,13 @@ public class BungeeAPI {
 
     public static Integer getOnlineAmount() {
         return BungeeStorage.UUID_TO_CONNECTEDSERVER.size();
+    }
+
+
+    private static Boolean isfirst = true;
+    public static ArrayList<String> getOnlineNames() {
+        ArrayList<String> Names = new ArrayList<>();
+        BungeeStorage.UUID_TO_CONNECTEDSERVER.keySet().forEach(key -> Names.add(UserInfoUtils.getPlayerUUIDOriginName(key)));
+        return Names;
     }
 }

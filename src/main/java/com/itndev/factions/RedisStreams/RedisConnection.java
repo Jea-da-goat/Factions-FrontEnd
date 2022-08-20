@@ -7,10 +7,7 @@ import com.itndev.factions.Storage.FactionStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
 import com.itndev.factions.Utils.JedisUtils;
 import com.itndev.factions.Utils.SystemUtils;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.RedisURI;
-import io.lettuce.core.StreamMessage;
-import io.lettuce.core.XReadArgs;
+import io.lettuce.core.*;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.async.RedisAsyncCommands;
 import io.lettuce.core.api.sync.RedisCommands;
@@ -22,17 +19,15 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 public class RedisConnection {
 
     private static RedisClient client = null;
     private static StatefulRedisConnection<String, String> connection = null;
-
+    private static StatefulRedisConnection<String, String> connection2 = null;
     private static RedisAsyncCommands<String, String> asyncCommands = null;
+    private static RedisAsyncCommands<String, String> asyncCommands2 = null;
     private static RedisStreamCommands<String, String> commands = null;
     private static RedisCommands<String, String> setcommands = null;
     private static String LastID_OUTPUT = "0-0";
@@ -101,11 +96,11 @@ public class RedisConnection {
     }
 
 
-    @Deprecated
     public static void RedisConnect() {
-        RedisURI redisURI = RedisURI.Builder.redis(redis_address, redis_port).withPassword(redis_password).build();
+        RedisURI redisURI = RedisURI.Builder.redis(redis_address, redis_port).withPassword(redis_password.toCharArray()).build();
         client = RedisClient.create(redisURI);
         connection = client.connect();
+        connection2 = client.connect();
         commands = connection.sync();
         setcommands = connection.sync();
         
@@ -411,6 +406,7 @@ public class RedisConnection {
 
     public static void RedisDisConnect() {
         connection.close();
+        connection2.close();
         closed = true;
     }
 
@@ -419,6 +415,13 @@ public class RedisConnection {
             connection = client.connect();
         }
         return connection;
+    }
+
+    private static StatefulRedisConnection<String, String> getRedisConnection2() {
+        if (connection2 == null || !connection2.isOpen()) {
+            connection2 = client.connect();
+        }
+        return connection2;
     }
 
     public static RedisStreamCommands<String, String> getRedisCommands() {
@@ -435,13 +438,19 @@ public class RedisConnection {
         return asyncCommands;
     }
 
+    public static RedisAsyncCommands<String, String> getAsyncRedisCommands2() {
+        if(asyncCommands2 == null) {
+            asyncCommands2 = getRedisConnection2().async();
+        }
+        return asyncCommands2;
+    }
+
     public static void RedisStreamReader() {
 
         new Thread(() -> {
             while (true) {
                 try {
-                    READ_OUTPUT_STREAM();
-                    READ_INNER_STREAM();
+                    READ_STREAM_ASYNC();
                     Thread.sleep(5);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -452,7 +461,7 @@ public class RedisConnection {
             }
         }).start();
 
-        new Thread(() -> {
+        /*new Thread(() -> {
             while (true) {
                 try {
                     READ_INNER2_STREAM();
@@ -464,16 +473,47 @@ public class RedisConnection {
                     break;
                 }
             }
-        }).start();
+        }).start();*/
 
 
         //String lastSeenMessage = "0-0";
 
     }
 
+    private static void READ_STREAM_ASYNC() throws ExecutionException, InterruptedException, TimeoutException {
+        RedisFuture<List<StreamMessage<String, String>>> OUTPUT = getAsyncRedisCommands().xread(
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_OUTPUT_NAME(), get_LastID_OUTPUT()));
+        RedisFuture<List<StreamMessage<String, String>>> INTER = getAsyncRedisCommands().xread(
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT_NAME(), get_LastID_INNER()));
+        RedisFuture<List<StreamMessage<String, String>>> INTER2 = getAsyncRedisCommands().xread(
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT2_NAME(), get_LastID_INNER2()));
+        Thread.sleep(5);
+        List<StreamMessage<String, String>> OUTPUT_RESPONCE = OUTPUT.get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);
+        List<StreamMessage<String, String>> INTER_RESPONCE = INTER.get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);
+        List<StreamMessage<String, String>> INTER2_RESPONCE = INTER2.get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);
+        for (StreamMessage<String, String> message : OUTPUT_RESPONCE) {
+            set_LastID_OUTPUT(message.getId());
+            String compressedhashmap = message.getBody().get(StaticVal.getCommand());
+            ReadCompressedHashMap_READ(StreamConfig.get_Stream_OUTPUT_NAME(), compressedhashmap);
+        }
+        for (StreamMessage<String, String> message : INTER_RESPONCE) {
+            set_LastID_INNER(message.getId());
+            String compressedhashmap = message.getBody().get(StaticVal.getCommand());
+            ReadCompressedHashMap_READ(StreamConfig.get_Stream_INTERCONNECT_NAME(), compressedhashmap);
+        }
+        Thread PROCESS_MAIN_CHAT = new Thread(() -> {
+            for (StreamMessage<String, String> message : INTER2_RESPONCE) {
+                set_LastID_INNER2(message.getId());
+                String compressedhashmap = message.getBody().get(StaticVal.getCommand());
+                ReadCompressedHashMap_READ_INNER2(StreamConfig.get_Stream_INTERCONNECT2_NAME(), compressedhashmap);
+            }
+        });
+        PROCESS_MAIN_CHAT.start();
+    }
+
     private static void READ_OUTPUT_STREAM() throws ExecutionException, InterruptedException, TimeoutException {
         List<StreamMessage<String, String>> messages = getAsyncRedisCommands().xread(
-                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_OUTPUT_NAME(), get_LastID_OUTPUT())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);;
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_OUTPUT_NAME(), get_LastID_OUTPUT())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);
 
         for (StreamMessage<String, String> message : messages) {
             set_LastID_OUTPUT(message.getId());
@@ -484,7 +524,7 @@ public class RedisConnection {
 
     private static void READ_INNER_STREAM() throws ExecutionException, InterruptedException, TimeoutException {
         List<StreamMessage<String, String>> messages = getAsyncRedisCommands().xread(
-                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT_NAME(), get_LastID_INNER())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);;
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT_NAME(), get_LastID_INNER())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);
         for (StreamMessage<String, String> message : messages) {
             set_LastID_INNER(message.getId());
             String compressedhashmap = message.getBody().get(StaticVal.getCommand());
@@ -493,10 +533,11 @@ public class RedisConnection {
     }
 
     private static void READ_INNER2_STREAM() throws ExecutionException, InterruptedException, TimeoutException {
-        List<StreamMessage<String, String>> messages = getAsyncRedisCommands().xread(
-                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT2_NAME(), get_LastID_INNER2())).get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);;
+        RedisFuture<List<StreamMessage<String, String>>> INTER2 = getAsyncRedisCommands2().xread(
+                XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT2_NAME(), get_LastID_INNER2()));
+        List<StreamMessage<String, String>> INTER2_RESPONCE = INTER2.get(StaticVal.getRedisCommandTimeoutInMillies(), TimeUnit.MILLISECONDS);
 
-        for (StreamMessage<String, String> message : messages) {
+        for (StreamMessage<String, String> message : INTER2_RESPONCE) {
             set_LastID_INNER2(message.getId());
             String compressedhashmap = message.getBody().get(StaticVal.getCommand());
             ReadCompressedHashMap_READ_INNER2(StreamConfig.get_Stream_INTERCONNECT2_NAME(), compressedhashmap);

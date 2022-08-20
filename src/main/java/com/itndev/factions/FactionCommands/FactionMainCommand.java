@@ -51,7 +51,7 @@ public class FactionMainCommand implements CommandExecutor {
         return false;
     }
 
-    @Deprecated
+
     private void factioncommand(Player sender, String[] args) {
         if(args.length < 1) {
             FactionHelp.FactionHelp(sender);

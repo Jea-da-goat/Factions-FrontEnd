@@ -1,6 +1,7 @@
 package com.itndev.factions.FactionCommands;
 
 import com.itndev.factions.Config.Config;
+import com.itndev.factions.RedisStreams.BungeeAPI.BungeeAPI;
 import com.itndev.factions.RedisStreams.BungeeAPI.BungeeStorage;
 import com.itndev.factions.Storage.FactionStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
@@ -58,7 +59,7 @@ public class FactionCommandTabComplete implements TabCompleter {
             }
         }
         if(tabcomplete.isEmpty()) {
-            BungeeStorage.UUID_TO_CONNECTEDSERVER.keySet().forEach(UUID -> tabcomplete.add(UserInfoUtils.getPlayerUUIDOriginName(UUID)));
+            return BungeeAPI.getOnlineNames();
         }
         return tabcomplete;
     }
