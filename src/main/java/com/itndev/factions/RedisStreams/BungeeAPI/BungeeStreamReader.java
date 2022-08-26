@@ -24,7 +24,7 @@ public class BungeeStreamReader {
             while (true) {
                 try {
                     READ_OUTPUT_STREAM();
-                    Thread.sleep(5);
+                    Thread.sleep(20);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

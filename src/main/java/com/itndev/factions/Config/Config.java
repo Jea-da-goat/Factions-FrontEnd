@@ -2,6 +2,7 @@ package com.itndev.factions.Config;
 
 import com.itndev.factions.Main;
 import com.itndev.factions.RedisStreams.RedisConnection;
+import com.itndev.factions.SocketConnection.Socket;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
@@ -72,6 +73,8 @@ public class Config {
         RedisConnection.set_LastID_OUTPUT(customlocalstorage.getString("lastread.LastID_OUTPUT"));
         RedisConnection.set_LastID_INNER(customlocalstorage.getString("lastread.LastID_INNER"));
         RedisConnection.set_LastID_BUNGEE(customlocalstorage.getString("lastread.LastID_BUNGEE"));
+        Socket.Address = customlocalstorage.getString("backend.address");
+        Socket.Port = customlocalstorage.getInt("backend.port");
     }
 
     public static void addDefaultConfig() {
@@ -84,6 +87,8 @@ public class Config {
         customlocalstorage.addDefault("lastread.LastID_OUTPUT", k);
         customlocalstorage.addDefault("lastread.LastID_INNER", k);
         customlocalstorage.addDefault("lastread.LastID_BUNGEE", k);
+        customlocalstorage.addDefault("backend.address", Socket.Address);
+        customlocalstorage.addDefault("backend.port", Socket.Port);
         customlocalstorage.options().copyDefaults(true);
     }
 }

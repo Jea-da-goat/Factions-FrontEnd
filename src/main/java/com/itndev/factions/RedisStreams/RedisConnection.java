@@ -448,9 +448,11 @@ public class RedisConnection {
     public static void RedisStreamReader() {
 
         new Thread(() -> {
+            Thread.currentThread().setPriority(1);
             while (true) {
                 try {
-                    READ_STREAM_ASYNC();
+                    READ_OUTPUT_STREAM();
+                    READ_INNER_STREAM();
                     Thread.sleep(5);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -461,7 +463,7 @@ public class RedisConnection {
             }
         }).start();
 
-        /*new Thread(() -> {
+        new Thread(() -> {
             while (true) {
                 try {
                     READ_INNER2_STREAM();
@@ -473,7 +475,7 @@ public class RedisConnection {
                     break;
                 }
             }
-        }).start();*/
+        }).start();
 
 
         //String lastSeenMessage = "0-0";
@@ -481,7 +483,7 @@ public class RedisConnection {
     }
 
     private static void READ_STREAM_ASYNC() throws ExecutionException, InterruptedException, TimeoutException {
-        RedisFuture<List<StreamMessage<String, String>>> OUTPUT = getAsyncRedisCommands().xread(
+        RedisFuture<List<StreamMessage<String, String>>> OUTPUT = getAsyncRedisCommands().xread(XReadArgs.Builder.block(Duration.ofMillis(100)),
                 XReadArgs.StreamOffset.from(StreamConfig.get_Stream_OUTPUT_NAME(), get_LastID_OUTPUT()));
         RedisFuture<List<StreamMessage<String, String>>> INTER = getAsyncRedisCommands().xread(
                 XReadArgs.StreamOffset.from(StreamConfig.get_Stream_INTERCONNECT_NAME(), get_LastID_INNER()));
@@ -565,6 +567,7 @@ public class RedisConnection {
 
     public static void RedisStreamWriter() {
         new Thread(() -> {
+            Thread.currentThread().setPriority(1);
             while (true) {
                 try {
                     String compressedhashmap;

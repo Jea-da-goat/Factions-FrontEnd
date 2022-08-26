@@ -3,6 +3,7 @@ package com.itndev.factions.Listener;
 import com.itndev.factions.Config.Config;
 import com.itndev.factions.Jedis.JedisTempStorage;
 import com.itndev.factions.Main;
+import com.itndev.factions.SocketConnection.Socket;
 import com.itndev.factions.Storage.FactionStorage;
 import com.itndev.factions.Storage.TempStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
@@ -362,6 +363,10 @@ public class PlayerListener implements Listener {
         Player p = e.getPlayer();
         e.setCancelled(true);
         if(ChatColor.stripColor(e.getMessage()).isBlank()) {
+            return;
+        }
+        if(!Socket.Connected) {
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&o&l[ &r&f국가 &a&o&l] &r&f데이터베이스 서버와의 연결이 끊김으로써 채팅이 잠깁니다"));
             return;
         }
         k = k.stripTrailing();

@@ -5,6 +5,7 @@ import com.itndev.factions.Config.Config;
 import com.itndev.factions.Config.Lang;
 import com.itndev.factions.Faction.Faction;
 import com.itndev.factions.Jedis.JedisTempStorage;
+import com.itndev.factions.SocketConnection.Socket;
 import com.itndev.factions.Utils.*;
 import com.itndev.factions.Utils.FactionList.FactionList;
 import org.bukkit.ChatColor;
@@ -36,6 +37,10 @@ public class FactionMainCommand implements CommandExecutor {
         if(sender instanceof Player) {
             Player p = (Player) sender;
             if(label.equalsIgnoreCase("국가")) {
+                if(!Socket.Connected) {
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&o&l[ &r&f국가 &a&o&l] &r&f데이터베이스 서버와의 연결이 끊김으로써 명령어 사용에 제한이 걸립니다"));
+                    return true;
+                }
                 if (commandcooldown.containsKey(sender.getName())) {
                     int cooldownTime = 2;
                     long secondsLeft = ((Long) commandcooldown.get(sender.getName())).longValue() / 1000L + cooldownTime - System.currentTimeMillis() / 1000L;

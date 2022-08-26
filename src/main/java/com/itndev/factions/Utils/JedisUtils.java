@@ -24,7 +24,7 @@ public class JedisUtils {
         return false;
     }
 
-    public static String HashMap2String(ConcurrentHashMap<String, String> map) {
+    public static String HashMap2String(HashMap<String, String> map) {
         String finalbuildstring = buffer + splitter;
         if(!map.isEmpty()) {
             int maxamount = Integer.parseInt(map.get(StaticVal.getMaxAmount()));

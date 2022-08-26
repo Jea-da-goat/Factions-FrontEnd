@@ -4,8 +4,8 @@ import com.itndev.factions.Main;
 import com.itndev.factions.Utils.CacheUtils;
 import com.itndev.factions.Utils.FactionUtils;
 import com.itndev.factions.Utils.SystemUtils;
+import io.lettuce.core.GeoArgs;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -62,37 +62,33 @@ public class FactionList {
 
 
     public static void BuildFactionTop() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                sortByValue(FactionBalTop);
+        new Thread(() -> {
+            SortedList sort = sortByValue(FactionBalTop);
+            synchronized (FactionTop) {
+                FactionTop.clear();
+                FactionTop.putAll(sort.getMap());
             }
-        }.runTaskAsynchronously(Main.getInstance());
+            synchronized (FactionTopSize) {
+                FactionTopSize = sort.getLength();
+            }
+        }).start();
     }
 
-    public static void sortByValue(HashMap<String, Double> hm)
+    public static SortedList sortByValue(HashMap<String, Double> hm)
     {
         // Create a list from elements of HashMap
-        List<Map.Entry<String, Double> > list =
-                new LinkedList<Map.Entry<String, Double> >(hm.entrySet());
-
-        FactionTop.clear();
+        List<Map.Entry<String, Double> > list = new LinkedList<>(hm.entrySet());
         // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<String, Double> >() {
-            public int compare(Map.Entry<String, Double> o1,
-                               Map.Entry<String, Double> o2)
-            {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
-
+        list.sort(Map.Entry.comparingByValue());
         // put data from sorted list to hashmap
-        FactionTopSize = 0;
+        int size = 0;
+        HashMap<Integer, String> map = new HashMap<>();
         Integer FactionTopSizeTemp = list.size();
         for (Map.Entry<String, Double> aa : list) {
-            FactionTop.put(FactionTopSizeTemp - FactionTopSize, aa.getKey());
-            FactionTopSize = FactionTopSize + 1;
+            map.put(FactionTopSizeTemp - size, aa.getKey());
+            size = size + 1;
         }
+        return new SortedList(map, size);
     }
 
 }

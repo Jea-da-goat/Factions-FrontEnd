@@ -67,8 +67,9 @@ public class Main extends JavaPlugin {
         setupEconomy();
 
         RedisConnection.RedisConnect();
-        RedisConnection.RedisStreamWriter();
-        RedisConnection.RedisStreamReader();
+        /*RedisConnection.RedisStreamWriter();
+        RedisConnection.RedisStreamReader();*/
+        com.itndev.factions.SocketConnection.Main.launch();
         BungeeStreamReader.RedisStreamReader();
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

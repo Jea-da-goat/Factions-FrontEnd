@@ -10,9 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class JedisTempStorage {
 
-    public static final ConcurrentHashMap<String, String> Temp_INPUT_MAP = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<String, String> Temp_INTERCONNECT_MAP = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<String, String> Temp_INTERCONNECT2_MAP = new ConcurrentHashMap<>();
+    public static final HashMap<String, String> Temp_INPUT_MAP = new HashMap<>();
+    public static final HashMap<String, String> Temp_INTERCONNECT_MAP = new HashMap<>();
+    public static final HashMap<String, String> Temp_INTERCONNECT2_MAP = new HashMap<>();
     //public static final ConcurrentHashMap<String, String> TempChatQueue = new ConcurrentHashMap<>();
 
 
