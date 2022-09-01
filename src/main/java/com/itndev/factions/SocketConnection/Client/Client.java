@@ -2,6 +2,7 @@ package com.itndev.factions.SocketConnection.Client;
 
 import com.comphenix.protocol.PacketType;
 import com.itndev.factions.Jedis.JedisManager;
+import com.itndev.factions.RedisStreams.BungeeAPI.BungeeStorage;
 import com.itndev.factions.RedisStreams.StaticVal;
 import com.itndev.factions.SocketConnection.IO.ResponceList;
 import com.itndev.factions.Utils.JedisUtils;
@@ -70,12 +71,15 @@ public class Client {
                                     for (int c = 1; c <= Integer.parseInt(map.get(StaticVal.getMaxAmount())); c++) {
                                         SystemUtils.PROCCED_INNER2_CHAT(map.get(String.valueOf(c)), ServerName);
                                     }
-                                } else {
+                                } else if(DataType.equalsIgnoreCase("FrontEnd-Interconnect")) {
                                     for (int c = 1; c <= Integer.parseInt(map.get(StaticVal.getMaxAmount())); c++) {
                                         JedisManager.updatehashmap(map.get(String.valueOf(c)), ServerName);
                                     }
+                                } else {
+                                    for (int c = 1; c <= Integer.parseInt(map.get(StaticVal.getMaxAmount())); c++) {
+                                        BungeeStorage.READ_Bungee_command(map.get(String.valueOf(c)));
+                                    }
                                 }
-
                             } else {
                                 close = true;
                                 this.closeAll();
