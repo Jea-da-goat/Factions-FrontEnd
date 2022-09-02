@@ -99,7 +99,7 @@ public class Main extends JavaPlugin {
         ConfigIO.save();
         RegisterStuff.onShutdown();
         ShutDown = true;
-        RedisConnection.RedisDisConnect();
+        //RedisConnection.RedisDisConnect();
         try {
             hikariCP.getHikariConnection().close();
         } catch (SQLException e) {

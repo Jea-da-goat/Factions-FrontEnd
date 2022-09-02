@@ -111,13 +111,13 @@ public class Client {
         try {
             output.writeObject(new HashMap<String, String>());
             output.flush();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.out.println("ex -< error Report");
             ex.printStackTrace();
         }
         try {
             clientSocket.close();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.out.println("ex -< error Report");
             ex.printStackTrace();
         }
