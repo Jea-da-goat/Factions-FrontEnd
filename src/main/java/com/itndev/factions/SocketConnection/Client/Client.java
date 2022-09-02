@@ -55,9 +55,9 @@ public class Client {
                     Boolean close = false;
                     while(!close) {
                         try {
-                            HashMap<String, String> map;
+                            HashMap<Integer, String> map;
                             try {
-                                map = (HashMap<String, String>) input.readObject();
+                                map = (HashMap<Integer, String>) input.readObject();
                             } catch (Exception exception) {
                                 exception.printStackTrace();
                                 map = new HashMap<>();
@@ -68,16 +68,16 @@ public class Client {
                                 ServerName = map.getOrDefault(StaticVal.getServerNameArgs(), "");
                                 DataType = map.getOrDefault(StaticVal.getDataTypeArgs(), "");
                                 if(DataType.equalsIgnoreCase("FrontEnd-Chat")) {
-                                    for (int c = 1; c <= Integer.parseInt(map.get(StaticVal.getMaxAmount())); c++) {
-                                        SystemUtils.PROCCED_INNER2_CHAT(map.get(String.valueOf(c)), ServerName);
+                                    for (int c = 1; c <= map.size() - 2; c++) {
+                                        SystemUtils.PROCCED_INNER2_CHAT(map.get(c), ServerName);
                                     }
                                 } else if(DataType.equalsIgnoreCase("FrontEnd-Interconnect")) {
-                                    for (int c = 1; c <= Integer.parseInt(map.get(StaticVal.getMaxAmount())); c++) {
-                                        JedisManager.updatehashmap(map.get(String.valueOf(c)), ServerName);
+                                    for (int c = 1; c <= map.size() - 2; c++) {
+                                        JedisManager.updatehashmap(map.get(c), ServerName);
                                     }
                                 } else {
-                                    for (int c = 1; c <= Integer.parseInt(map.get(StaticVal.getMaxAmount())); c++) {
-                                        BungeeStorage.READ_Bungee_command(map.get(String.valueOf(c)));
+                                    for (int c = 1; c <= map.size() - 2; c++) {
+                                        BungeeStorage.READ_Bungee_command(map.get(c));
                                     }
                                 }
                             } else {
