@@ -30,7 +30,7 @@ public class Client {
         this.run();
     }
 
-    public void update(HashMap<String, String> map) throws IOException {
+    public void update(HashMap<Integer, String> map) throws IOException {
         if(output == null) {
             System.out.println("OutputStream is Null");
             return;

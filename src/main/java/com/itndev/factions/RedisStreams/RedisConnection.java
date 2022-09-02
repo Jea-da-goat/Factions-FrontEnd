@@ -572,13 +572,13 @@ public class RedisConnection {
                 try {
                     String compressedhashmap;
                     synchronized (JedisTempStorage.Temp_INPUT_MAP) {
-                        compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INPUT_MAP);
+                        //compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INPUT_MAP);
                         JedisTempStorage.Temp_INPUT_MAP.clear();
                     }
-                    if(compressedhashmap != null) {
-                        Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
-                        getAsyncRedisCommands().xadd(StreamConfig.get_Stream_INPUT_NAME(), body);
-                    }
+                    //if(compressedhashmap != null) {
+                    //    Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
+                    //    getAsyncRedisCommands().xadd(StreamConfig.get_Stream_INPUT_NAME(), body);
+                    //}
                     Thread.sleep(10);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -593,7 +593,7 @@ public class RedisConnection {
                 try {
                     String compressedhashmap;
                     synchronized (JedisTempStorage.Temp_INTERCONNECT_MAP) {
-                        compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INTERCONNECT_MAP);
+                        compressedhashmap = null;//JedisUtils.HashMap2String(JedisTempStorage.Temp_INTERCONNECT_MAP);
                         JedisTempStorage.Temp_INTERCONNECT_MAP.clear();
                     }
                     if(compressedhashmap != null) {
@@ -614,10 +614,10 @@ public class RedisConnection {
                 try {
                     String compressedhashmap;
                     synchronized (JedisTempStorage.Temp_INTERCONNECT2_MAP) {
-                        compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INTERCONNECT2_MAP);
+                        //compressedhashmap = JedisUtils.HashMap2String(JedisTempStorage.Temp_INTERCONNECT2_MAP);
                         JedisTempStorage.Temp_INTERCONNECT2_MAP.clear();
                     }
-                    if(compressedhashmap != null) {
+                    if(false){//compressedhashmap != null) {
                         Map<String, String> body = Collections.singletonMap(StaticVal.getCommand(), compressedhashmap);
                         getAsyncRedisCommands().xadd(StreamConfig.get_Stream_INTERCONNECT2_NAME(), body);
                     }
