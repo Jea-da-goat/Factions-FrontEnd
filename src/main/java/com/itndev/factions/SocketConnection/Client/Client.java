@@ -30,7 +30,7 @@ public class Client {
         this.run();
     }
 
-    public void update(HashMap<Integer, String> map) throws IOException {
+    public synchronized void update(HashMap<Integer, String> map) throws IOException {
         if(output == null) {
             System.out.println("OutputStream is Null");
             return;
@@ -39,7 +39,7 @@ public class Client {
         output.flush();
     }
 
-    private void run() {
+    private synchronized void run() {
         new Thread(() -> {
             while(true) {
                 try {
@@ -58,6 +58,8 @@ public class Client {
                             HashMap<Integer, String> map;
                             try {
                                 map = (HashMap<Integer, String>) input.readObject();
+                            } catch (StreamCorruptedException e){
+                                map = new HashMap<>();
                             } catch (Exception exception) {
                                 exception.printStackTrace();
                                 map = new HashMap<>();
@@ -71,7 +73,7 @@ public class Client {
                                     for (int c = 1; c <= map.size() - 2; c++) {
                                         SystemUtils.PROCCED_INNER2_CHAT(map.get(c), ServerName);
                                     }
-                                } else if(DataType.equalsIgnoreCase("FrontEnd-Interconnect")) {
+                                } else if(DataType.equalsIgnoreCase("FrontEnd-Interconnect") || DataType.equalsIgnoreCase("BackEnd-Responce")) {
                                     for (int c = 1; c <= map.size() - 2; c++) {
                                         JedisManager.updatehashmap(map.get(c), ServerName);
                                     }
