@@ -30,13 +30,12 @@ public class Client {
         this.run();
     }
 
-    public synchronized void update(HashMap<Integer, String> map) throws IOException {
+    public void update(HashMap<Integer, String> map) throws IOException {
         if(output == null) {
             System.out.println("OutputStream is Null");
             return;
         }
         output.writeObject(map);
-        output.flush();
     }
 
     private synchronized void run() {
@@ -45,7 +44,8 @@ public class Client {
                 try {
                     clientSocket = new Socket(this.hostname, this.port);
                     //output = new PrintStream(clientSocket.getOutputStream());
-
+                    clientSocket.setTcpNoDelay(true);
+                    clientSocket.setKeepAlive(true);
                     //output.println("Connection Enabled");
 
                     //in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
