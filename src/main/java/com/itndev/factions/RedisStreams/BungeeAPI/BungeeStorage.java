@@ -1,8 +1,13 @@
 package com.itndev.factions.RedisStreams.BungeeAPI;
 
+import com.itndev.factions.Jedis.JedisManager;
+import com.itndev.factions.Jedis.JedisTempStorage;
+import com.itndev.factions.Storage.UserInfoStorage;
 import com.itndev.factions.Utils.FactionUtils;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,6 +51,7 @@ public class BungeeStorage {
                 String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
                 String UUID = TEMP[0];
                 String NAME = TEMP[1];
+                UPDATE_USERINFO(UUID, NAME);
                 FactionUtils.FactionNotify(UUID, "TeamChat", "&r&7" + FactionUtils.getPlayerLangRank(UUID) + " &c" + NAME + "&f 님이 서버에 접속했습니다", "true");
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-LEAVE")) {
                 String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
@@ -59,6 +65,7 @@ public class BungeeStorage {
                 String NAME = TEMP[1];
                 String ServerName = TEMP[2];
                 addPlayer(UUID, ServerName);
+                UPDATE_USERINFO(UUID, NAME);
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-CONNECTSERVER")) {
                 String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
                 String UUID = TEMP[0];
@@ -70,5 +77,27 @@ public class BungeeStorage {
                 SERVER_TO_UUIDLIST.clear();
             }
         }
+    }
+
+    public static void UPDATE_USERINFO(String UUID, String Name) {
+        //SystemUtils.logger("Player NAME:" + Name + ", UUID:" + UUID + " has connected to server");
+        List<String> bulkcmd = new ArrayList<>();
+        if(UserInfoStorage.uuidname.containsKey(UUID)) {
+            if(!UserInfoStorage.namename.get(UserInfoStorage.uuidname.get(UUID)).equals(Name)) {
+                String OriginalName = UserInfoStorage.uuidname.get(UUID);
+                JedisManager.updatehashmap("update:=:nameuuid:=:remove:=:" + OriginalName + ":=:add:=:" + UUID);
+                JedisManager.updatehashmap("update:=:namename:=:remove:=:" + OriginalName + ":=:add:=:" + Name);
+                JedisManager.updatehashmap("update:=:uuidname:=:remove:=:" + UUID + ":=:add:=:" + Name.toLowerCase(Locale.ROOT));
+                JedisManager.updatehashmap("update:=:uuidname:=:add:=:" + UUID + ":=:add:=:" + Name.toLowerCase(Locale.ROOT));
+                JedisManager.updatehashmap("update:=:nameuuid:=:add:=:" + Name.toLowerCase(Locale.ROOT) + ":=:add:=:" + UUID);
+                JedisManager.updatehashmap("update:=:namename:=:add:=:" + Name.toLowerCase(Locale.ROOT) + ":=:add:=:" + Name);
+                OriginalName = null;
+            }
+        } else {
+            JedisManager.updatehashmap("update:=:uuidname:=:add:=:" + UUID + ":=:add:=:" + Name.toLowerCase(Locale.ROOT));
+            JedisManager.updatehashmap("update:=:nameuuid:=:add:=:" + Name.toLowerCase(Locale.ROOT) + ":=:add:=:" + UUID);
+            JedisManager.updatehashmap("update:=:namename:=:add:=:" + Name.toLowerCase(Locale.ROOT) + ":=:add:=:" + Name);
+        }
+        bulkcmd = null;
     }
 }

@@ -1,18 +1,16 @@
 package com.itndev.factions.SocketConnection.Client;
 
-import com.comphenix.protocol.PacketType;
 import com.itndev.factions.Jedis.JedisManager;
 import com.itndev.factions.RedisStreams.BungeeAPI.BungeeStorage;
 import com.itndev.factions.RedisStreams.StaticVal;
-import com.itndev.factions.SocketConnection.IO.ResponceList;
-import com.itndev.factions.Utils.JedisUtils;
 import com.itndev.factions.Utils.SystemUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Client {
 
@@ -30,68 +28,70 @@ public class Client {
         this.run();
     }
 
-    public void update(HashMap<Integer, String> map) throws IOException {
+    public synchronized void update(HashMap<Integer, String> map) throws IOException {
         if(output == null) {
             System.out.println("OutputStream is Null");
             return;
         }
         output.writeObject(map);
+        output.flush();
     }
 
-    private synchronized void run() {
+    private void run() {
         new Thread(() -> {
             while(true) {
                 try {
                     clientSocket = new Socket(this.hostname, this.port);
                     //output = new PrintStream(clientSocket.getOutputStream());
                     clientSocket.setTcpNoDelay(true);
-                    clientSocket.setKeepAlive(true);
                     //output.println("Connection Enabled");
 
                     //in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     output = new ObjectOutputStream(clientSocket.getOutputStream());
                     input = new ObjectInputStream(clientSocket.getInputStream());
+                    //writer = new PrintWriter(output, true);
+                    //reader = new Buffered(new InputStreamReader(input));
 
-                    Boolean close = false;
-                    while(!close) {
+                    while(true) {
                         try {
                             HashMap<Integer, String> map;
                             try {
+                                //map = (HashMap<Integer, String>) reader.read
                                 map = (HashMap<Integer, String>) input.readObject();
-                            } catch (StreamCorruptedException e){
-                                map = new HashMap<>();
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
-                                map = new HashMap<>();
-                            }
-                            if(map != null && !map.isEmpty()) {
-                                String ServerName;
-                                String DataType;
-                                ServerName = map.getOrDefault(StaticVal.getServerNameArgs(), "");
-                                DataType = map.getOrDefault(StaticVal.getDataTypeArgs(), "");
-                                if(DataType.equalsIgnoreCase("FrontEnd-Chat")) {
-                                    for (int c = 1; c <= map.size() - 2; c++) {
-                                        SystemUtils.PROCCED_INNER2_CHAT(map.get(c), ServerName);
+                                if(!map.isEmpty()) {
+                                    String ServerName;
+                                    String DataType;
+                                    ServerName = map.getOrDefault(StaticVal.getServerNameArgs(), "");
+                                    DataType = map.getOrDefault(StaticVal.getDataTypeArgs(), "");
+                                    if(DataType.equalsIgnoreCase("FrontEnd-Chat")) {
+                                        for (int c = 1; c <= map.size() - 2; c++) {
+                                            SystemUtils.PROCCED_INNER2_CHAT(map.get(c), ServerName);
+                                        }
+                                        //System.out.println(1);
+                                    } else if(DataType.equalsIgnoreCase("FrontEnd-Interconnect") || DataType.equalsIgnoreCase("BackEnd-Responce")) {
+                                        for (int c = 1; c <= map.size() - 2; c++) {
+                                            JedisManager.updatehashmap(map.get(c), ServerName);
+                                        }
+                                        //System.out.println(2);
+                                    } else {
+                                        for (int c = 1; c <= map.size() - 2; c++) {
+                                            BungeeStorage.READ_Bungee_command(map.get(c));
+                                        }
+                                        //System.out.println(3);
                                     }
-                                } else if(DataType.equalsIgnoreCase("FrontEnd-Interconnect") || DataType.equalsIgnoreCase("BackEnd-Responce")) {
-                                    for (int c = 1; c <= map.size() - 2; c++) {
-                                        JedisManager.updatehashmap(map.get(c), ServerName);
-                                    }
+                                    //System.out.println(DataType);
                                 } else {
-                                    for (int c = 1; c <= map.size() - 2; c++) {
-                                        BungeeStorage.READ_Bungee_command(map.get(c));
-                                    }
+                                    this.closeAll();
                                 }
-                            } else {
-                                close = true;
-                                this.closeAll();
+                            } catch (Exception e){
+                                e.printStackTrace();
                             }
+
                         } catch (Exception e) {
                             e.printStackTrace();
-                            close = true;
                         }
+                        Thread.sleep(100);
                     }
-                    Thread.sleep(100);
                 } catch (IOException | InterruptedException e) {
 
                     this.closeAll();
@@ -111,8 +111,7 @@ public class Client {
 
     public void closeAll() {
         try {
-            output.writeObject(new HashMap<String, String>());
-            output.flush();
+            update(new HashMap<Integer, String>());
         } catch (Exception ex) {
             System.out.println("ex -< error Report");
             ex.printStackTrace();

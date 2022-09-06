@@ -116,29 +116,15 @@ public class UserInfoStorage {
 
                 if(args[4].equalsIgnoreCase("add")) {
 
-                    if(UserInfoStorage.namename.containsKey(key)) {
-                        UserInfoStorage.namename.remove(key);
-                        UserInfoStorage.namename.put(key, value);
-                    } else {
-                        UserInfoStorage.namename.put(key, value);
-                    }
+                    UserInfoStorage.namename.remove(key);
+                    UserInfoStorage.namename.put(key, value);
                 } else if(args[4].equalsIgnoreCase("remove")) {
-
-                    if(UserInfoStorage.namename.containsKey(key)) {
-
-                        UserInfoStorage.namename.remove(key);
-
-                        //할거 없다
-                    } else {
-                        //할거 없다
-                    }
+                    UserInfoStorage.namename.remove(key);
                 }
 
             } else if(args[2].equalsIgnoreCase("remove")) {
                 String key = args[3];
-                if(UserInfoStorage.namename.containsKey(key)) {
-                    UserInfoStorage.namename.remove(key);
-                }
+                UserInfoStorage.namename.remove(key);
             }
 
         } else if(args[1].equalsIgnoreCase("nameuuid")) {
@@ -148,30 +134,15 @@ public class UserInfoStorage {
                 String value = args[5]; //추가하고 싶은 값
 
                 if(args[4].equalsIgnoreCase("add")) {
-
-                    if(UserInfoStorage.nameuuid.containsKey(key)) {
-                        UserInfoStorage.nameuuid.remove(key);
-                        UserInfoStorage.nameuuid.put(key, value);
-                    } else {
-                        UserInfoStorage.nameuuid.put(key, value);
-                    }
+                    UserInfoStorage.nameuuid.remove(key);
+                    UserInfoStorage.nameuuid.put(key, value);
                 } else if(args[4].equalsIgnoreCase("remove")) {
-
-                    if(UserInfoStorage.nameuuid.containsKey(key)) {
-
-                        UserInfoStorage.nameuuid.remove(key);
-
-                        //할거 없다
-                    } else {
-                        //할거 없다
-                    }
+                    UserInfoStorage.nameuuid.remove(key);
                 }
 
             } else if(args[2].equalsIgnoreCase("remove")) {
                 String key = args[3];
-                if(UserInfoStorage.nameuuid.containsKey(key)) {
-                    UserInfoStorage.nameuuid.remove(key);
-                }
+                UserInfoStorage.nameuuid.remove(key);
             }
 
         } else if(args[1].equalsIgnoreCase("uuidname")) {
@@ -181,33 +152,15 @@ public class UserInfoStorage {
                 String value = args[5]; //추가하고 싶은 값
 
                 if(args[4].equalsIgnoreCase("add")) {
-
-                    if(UserInfoStorage.uuidname.containsKey(key)) {
-                        UserInfoStorage.uuidname.remove(key);
-                        UserInfoStorage.uuidname.put(key, value);
-                    } else {
-                        UserInfoStorage.uuidname.put(key, value);
-                    }
+                    UserInfoStorage.uuidname.remove(key);
+                    UserInfoStorage.uuidname.put(key, value);
                 } else if(args[4].equalsIgnoreCase("remove")) {
-
-                    if(UserInfoStorage.uuidname.containsKey(key)) {
-
-                        UserInfoStorage.uuidname.remove(key);
-
-                        //할거 없다
-                    } else {
-                        //할거 없다
-                    }
-                }
-
-            } else if(args[2].equalsIgnoreCase("remove")) {
-                String key = args[3];
-                if(UserInfoStorage.uuidname.containsKey(key)) {
                     UserInfoStorage.uuidname.remove(key);
                 }
+            } else if(args[2].equalsIgnoreCase("remove")) {
+                String key = args[3];
+                UserInfoStorage.uuidname.remove(key);
             }
-
         }
     }
-
 }

@@ -321,4 +321,119 @@ public class JedisManager {
 
     }
 
+    public static void updatehashmap(String k) {
+        if(k.equalsIgnoreCase("-buffer-")) {
+            return;
+        }
+        double c = 1000;
+        if(c > 600) {
+            String[] args = k.split(":=:");
+            if(args[0].equalsIgnoreCase("update")) {
+                if(args[1].equalsIgnoreCase("FactionToLand")
+                        || args[1].equalsIgnoreCase("LandToFaction")
+                        || args[1].equalsIgnoreCase("FactionRank")
+                        || args[1].equalsIgnoreCase("PlayerFaction")
+                        || args[1].equalsIgnoreCase("FactionMember")
+                        || args[1].equalsIgnoreCase("FactionNameToFactionName")
+                        || args[1].equalsIgnoreCase("FactionNameToFactionUUID")
+                        || args[1].equalsIgnoreCase("FactionUUIDToFactionName")
+                        || args[1].equalsIgnoreCase("FactionInviteQueue")
+                        || args[1].equalsIgnoreCase("FactionDTR")
+                        || args[1].equalsIgnoreCase("FactionInfo")
+                        || args[1].equalsIgnoreCase("FactionInfoList")
+                        || args[1].equalsIgnoreCase("Timeout2")
+                        || args[1].equalsIgnoreCase("Timeout2info")
+                        || args[1].equalsIgnoreCase("FactionOutPost")
+                        || args[1].equalsIgnoreCase("FactionOutPostList")
+                        || args[1].equalsIgnoreCase("FactionToOutPost")
+                        || args[1].equalsIgnoreCase("OutPostToFaction")
+                        || args[1].equalsIgnoreCase("DESTORYED_FactionToLand")
+                        || args[1].equalsIgnoreCase("DESTORYED_LandToFaction")
+                        || args[1].equalsIgnoreCase("DESTROYED_FactionUUIDToFactionName")) {
+                    FactionStorage.FactionStorageUpdateHandler(args, Main.ServerName);
+                } else if(args[1].equalsIgnoreCase("namename")
+                        || args[1].equalsIgnoreCase("nameuuid")
+                        || args[1].equalsIgnoreCase("uuidname")) {
+                    UserInfoStorage.UserInfoStorageUpdateHandler(args);
+                } else if(args[1].equalsIgnoreCase("cachedDTR")
+                        || args[1].equalsIgnoreCase("cachedBank")) {
+                    CachedStorage.JedisCacheSync(args);
+                }
+            } else if(args[0].equalsIgnoreCase("ping")) {
+                //jedis.c = Math.toIntExact(c + 1);
+                if(c == 4) {
+                    //jedis.c = 0;
+                    System.out.println("Pinged from Redis Database");
+                }
+            } else if(args[0].equalsIgnoreCase("chat")) {
+                String playeruuid = args[1];
+                String message = args[2];
+                FactionUtils.FactionChat(playeruuid, message);
+                //utils.teamchat(playeruuid, message);
+            } else if(args[0].equalsIgnoreCase("proxyuserupdate")) {
+
+                //String playeruuid = args[1];
+                //if(args[0].equalsIgnoreCase())
+                //String targetuuid = args[2];
+                //String message = args[3];
+                //String trueorfalse = args[4];
+                //utils.teamnotify(playeruuid, targetuuid, message, trueorfalse);
+            } else if(args[0].equalsIgnoreCase("notify")) {
+
+                String playeruuid = args[1];
+                String targetuuid = args[2];
+                String message = args[3];
+                String trueorfalse = args[4];
+                FactionUtils.FactionNotify(playeruuid, targetuuid, message, trueorfalse);
+                //utils.teamnotify(playeruuid, targetuuid, message, trueorfalse);
+            } else if(args[0].equalsIgnoreCase("warplocation")) {
+                String targetuuid = args[1];
+                String Server = args[2];
+                String stringlocation = args[3];
+                String expired = args[4];
+                if(Main.ServerName.equalsIgnoreCase(Server)) {
+                    if(!expired.equalsIgnoreCase("expired")) {
+                        Location loc = SystemUtils.string2loc(stringlocation);
+                        PlayerListener.onJoinWarp.put(targetuuid, loc);
+                    } else {
+                        PlayerListener.onJoinWarp.remove(targetuuid);
+                    }
+                }
+            } else if(args[0].equalsIgnoreCase("eco")) {
+                String giveortake = args[1];
+                String targetuuid = args[2];
+                String Amount = args[3];
+                if(Bukkit.getOfflinePlayer(UUID.fromString(targetuuid)).isOnline()) {
+                    OfflinePlayer op = Bukkit.getOfflinePlayer(UUID.fromString(targetuuid));
+                    Double AmountDouble = Double.parseDouble(Amount);
+                    if(giveortake.equalsIgnoreCase("give")) {
+                        Main.getEconomy().depositPlayer(op, AmountDouble);
+                    } else if(giveortake.equalsIgnoreCase("take")) {
+                        Main.getEconomy().withdrawPlayer(op, AmountDouble);
+                    } else {
+                        SystemUtils.warning("INVALID COMMAND USAGE AT ECON COMMAND [give/take/null <-]");
+                    }
+                }
+            } else if(args[0].equalsIgnoreCase("discord")) {
+                if(args[1].equalsIgnoreCase("auth")) {
+                    DiscordAuth.AcceptAuthInfo(args[2], args[3]);
+                }
+            } else if(args[0].equalsIgnoreCase("keepalive")) {
+                String UUID = args[1];
+                BackendIO.KeepAlive(UUID, "BLABLABLA");
+            } else {
+                System.out.println("[WARNING (REDIS)] WRONG COMMAND USAGE FROM REDIS" + " ( '" + k + "' )");
+            }
+
+
+        } else if(c <= 600) {
+            String warn = "data update failed... trying to update data that should already been processed or update has been duplicated / processed delayed (" + String.valueOf(c) + ")";
+            SystemUtils.warning(warn);
+            //utils.broadcastwarn(warn);
+        }
+        //example command "update:=:hashmap1~4:=:add/remove:=:key:=:add/remove/(앞에 remove일 경우 여기랑 이 뒤는 쓸 필요 없다):=:value"
+
+
+    }
+
 }
