@@ -1,15 +1,12 @@
 package com.itndev.factions.Storage;
 
 import com.itndev.factions.Config.Config;
-import com.itndev.factions.Jedis.JedisManager;
 import com.itndev.factions.Jedis.JedisTempStorage;
 import com.itndev.factions.Main;
-import com.itndev.factions.Utils.FactionUtils;
-import com.itndev.factions.Utils.UserInfoUtils;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 

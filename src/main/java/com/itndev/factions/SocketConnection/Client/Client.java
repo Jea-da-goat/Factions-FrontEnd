@@ -1,14 +1,13 @@
 package com.itndev.factions.SocketConnection.Client;
 
+import com.itndev.FaxLib.Utils.Data.DataStream;
 import com.itndev.factions.Jedis.JedisManager;
 import com.itndev.factions.RedisStreams.BungeeAPI.BungeeStorage;
-import com.itndev.factions.RedisStreams.StaticVal;
 import com.itndev.factions.Utils.SystemUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
 import java.net.Socket;
 import java.util.HashMap;
 
@@ -28,12 +27,12 @@ public class Client {
         this.run();
     }
 
-    public synchronized void update(HashMap<Integer, String> map) throws IOException {
+    public synchronized void update(DataStream stream) throws IOException {
         if(output == null) {
             System.out.println("OutputStream is Null");
             return;
         }
-        output.writeObject(map);
+        output.writeObject(stream);
         output.flush();
     }
 
@@ -54,16 +53,25 @@ public class Client {
 
                     while(true) {
                         try {
+                            DataStream stream;
                             HashMap<Integer, String> map;
                             try {
                                 //map = (HashMap<Integer, String>) reader.read
-                                map = (HashMap<Integer, String>) input.readObject();
-                                if(!map.isEmpty()) {
-                                    String ServerName;
-                                    String DataType;
-                                    ServerName = map.getOrDefault(StaticVal.getServerNameArgs(), "");
-                                    DataType = map.getOrDefault(StaticVal.getDataTypeArgs(), "");
-                                    if(DataType.equalsIgnoreCase("FrontEnd-Chat")) {
+                                stream = (DataStream) input.readObject();
+                                if(!stream.isEmpty()) {
+                                    String ServerName = stream.getServerName();
+                                    String DataType = stream.getDataType();
+                                    switch (DataType) {
+                                        case "FrontEnd-Chat":
+                                            stream.getStream().forEach(data -> SystemUtils.PROCCED_INNER2_CHAT(data, ServerName));
+                                        case "FrontEnd-Interconnect":
+                                            stream.getStream().forEach(data -> JedisManager.updatehashmap(data, ServerName));
+                                        case "BackEnd-Responce":
+                                            stream.getStream().forEach(data -> JedisManager.updatehashmap(data, ServerName));
+                                        case "BungeeCord-Forward":
+                                            stream.getStream().forEach(BungeeStorage::READ_Bungee_command);
+                                    }
+                                    /*if(DataType.equalsIgnoreCase("FrontEnd-Chat")) {
                                         for (int c = 1; c <= map.size() - 2; c++) {
                                             SystemUtils.PROCCED_INNER2_CHAT(map.get(c), ServerName);
                                         }
@@ -78,7 +86,7 @@ public class Client {
                                             BungeeStorage.READ_Bungee_command(map.get(c));
                                         }
                                         //System.out.println(3);
-                                    }
+                                    }*/
                                     //System.out.println(DataType);
                                 } else {
                                     this.closeAll();
@@ -111,7 +119,7 @@ public class Client {
 
     public void closeAll() {
         try {
-            update(new HashMap<Integer, String>());
+            update(new DataStream());
         } catch (Exception ex) {
             System.out.println("ex -< error Report");
             ex.printStackTrace();

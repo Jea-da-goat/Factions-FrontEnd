@@ -1,7 +1,6 @@
 package com.itndev.factions.Storage.StorageIO;
 
 import com.itndev.factions.Config.YamlConfig;
-import com.itndev.factions.Storage.FactionStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
 import org.bukkit.configuration.file.FileConfiguration;
 

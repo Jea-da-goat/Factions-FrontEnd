@@ -4,7 +4,7 @@ package com.itndev.factions.Dump;
 import com.itndev.FactionCore.Discord.AuthStorage;
 import com.itndev.FactionCore.Factions.FactionStorage;
 import com.itndev.FactionCore.Factions.UserInfoStorage;*/
-import com.itndev.factions.Storage.FactionStorage;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;

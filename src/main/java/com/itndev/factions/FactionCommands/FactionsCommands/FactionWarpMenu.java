@@ -1,7 +1,7 @@
 package com.itndev.factions.FactionCommands.FactionsCommands;
 
 import com.itndev.factions.Main;
-import com.itndev.factions.Storage.FactionStorage;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Utils.FactionUtils;
 import com.itndev.factions.Utils.SystemUtils;
 import net.kyori.adventure.text.Component;
@@ -15,7 +15,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FactionWarpMenu {

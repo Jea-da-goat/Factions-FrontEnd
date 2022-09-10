@@ -3,7 +3,7 @@ package com.itndev.factions.FactionCommands.FactionsCommands;
 import com.itndev.factions.Config.Config;
 import com.itndev.factions.Faction.FactionOutpost;
 import com.itndev.factions.Main;
-import com.itndev.factions.Storage.FactionStorage;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Storage.TempStorage;
 import com.itndev.factions.Utils.FactionUtils;
 import com.itndev.factions.Utils.SystemUtils;

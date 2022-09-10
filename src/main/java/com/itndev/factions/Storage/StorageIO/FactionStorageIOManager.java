@@ -1,12 +1,11 @@
 package com.itndev.factions.Storage.StorageIO;
 
 import com.itndev.factions.Config.YamlConfig;
-import com.itndev.factions.Storage.FactionStorage;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class FactionStorageIOManager {

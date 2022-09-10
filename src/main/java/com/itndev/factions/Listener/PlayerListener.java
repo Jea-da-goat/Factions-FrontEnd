@@ -4,9 +4,8 @@ import com.itndev.factions.Config.Config;
 import com.itndev.factions.Jedis.JedisTempStorage;
 import com.itndev.factions.Main;
 import com.itndev.factions.SocketConnection.Socket;
-import com.itndev.factions.Storage.FactionStorage;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Storage.TempStorage;
-import com.itndev.factions.Storage.UserInfoStorage;
 import com.itndev.factions.Utils.BackendIO;
 import com.itndev.factions.Utils.DiscordAuth.DiscordAuth;
 import com.itndev.factions.Utils.FactionUtils;
@@ -361,6 +360,8 @@ public class PlayerListener implements Listener {
         }
         String k = e.getMessage();
         Player p = e.getPlayer();
+        /*ItemStack item = p.getInventory().getItemInMainHand();
+        if(item != null && item.getType() != Material.AIR && item.hasItemMeta() && item.getItemMeta().hasDisplayName())*/
         e.setCancelled(true);
         if(ChatColor.stripColor(e.getMessage()).isBlank()) {
             return;

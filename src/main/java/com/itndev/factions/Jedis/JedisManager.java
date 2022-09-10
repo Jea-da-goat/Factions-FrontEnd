@@ -3,28 +3,20 @@ package com.itndev.factions.Jedis;
 import com.itndev.factions.Listener.PlayerListener;
 import com.itndev.factions.Main;
 import com.itndev.factions.Storage.CachedStorage;
-import com.itndev.factions.Storage.FactionStorage;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
 import com.itndev.factions.Utils.BackendIO;
 import com.itndev.factions.Utils.DiscordAuth.DiscordAuth;
 import com.itndev.factions.Utils.FactionUtils;
-import com.itndev.factions.Utils.JedisUtils;
 import com.itndev.factions.Utils.SystemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import redis.clients.jedis.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class JedisManager {
 

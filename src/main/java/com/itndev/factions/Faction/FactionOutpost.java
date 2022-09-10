@@ -2,7 +2,7 @@ package com.itndev.factions.Faction;
 
 import com.itndev.factions.AdminCommands.AdminMainCommand;
 import com.itndev.factions.Main;
-import com.itndev.factions.Storage.FactionStorage;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Utils.FactionUtils;
 import com.itndev.factions.Utils.SystemUtils;
 import org.bukkit.Location;

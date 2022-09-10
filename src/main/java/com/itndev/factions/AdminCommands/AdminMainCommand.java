@@ -5,7 +5,7 @@ import com.itndev.factions.Faction.FactionOutpost;
 import com.itndev.factions.Jedis.JedisManager;
 import com.itndev.factions.Jedis.JedisTempStorage;
 import com.itndev.factions.RedisStreams.RedisConnection;
-import com.itndev.factions.Storage.FactionStorage;
+import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Storage.StorageIO.FactionStorageIOManager;
 import com.itndev.factions.Storage.StorageIO.UserInfoStorageIOManager;
 import com.itndev.factions.Utils.FactionList.FactionList;
