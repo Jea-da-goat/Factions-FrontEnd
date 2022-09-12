@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class HikariCP {
@@ -105,6 +106,30 @@ public class HikariCP {
             ps.executeUpdate();
 
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void closeConnections(Connection connection, PreparedStatement ps, ResultSet rs) {
+        try {
+            if(connection != null && !connection.isClosed()) {
+                if (ps != null && !ps.isClosed()) {
+                    ps.close();
+                }
+                if (rs != null && !rs.isClosed()) {
+                    rs.close();
+                }
+                connection.close();
+            } else if(connection == null) {
+                if (ps != null && !ps.isClosed()) {
+                    ps.close();
+                }
+                if (rs != null && !rs.isClosed()) {
+                    rs.close();
+                }
+            }
+        } catch (Exception e) {
+            //(e.getMessage());
             e.printStackTrace();
         }
     }

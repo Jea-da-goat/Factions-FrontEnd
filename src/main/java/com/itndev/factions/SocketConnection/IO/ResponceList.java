@@ -1,6 +1,7 @@
 package com.itndev.factions.SocketConnection.IO;
 
 import com.itndev.FaxLib.Utils.Data.DataStream;
+import com.itndev.factions.Jedis.JedisManager;
 import com.itndev.factions.Jedis.JedisTempStorage;
 import com.itndev.factions.Main;
 import com.itndev.factions.RedisStreams.StaticVal;
@@ -10,9 +11,7 @@ import com.itndev.factions.Utils.JedisUtils;
 import com.itndev.factions.Utils.SystemUtils;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ResponceList {
 
@@ -35,14 +34,25 @@ public class ResponceList {
 
     }
 
+    public void update(HashMap<Integer, Object> stream) throws IOException {
+        client.update(stream);
+    }
+
     public void run() {
         new Thread(() -> {
             while (true) {
                 try {
                     synchronized (JedisTempStorage.Temp_INPUT_MAP) {
                         if(!JedisTempStorage.Temp_INPUT_MAP.isEmpty()) {
-                            DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", JedisTempStorage.Temp_INPUT_MAP);
+                            HashMap<Integer, Object> stream = new HashMap<>();
+                            stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
+                            stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Output");
+                            List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INPUT_MAP.stream().toList());
+                            stream.put(1, temp);
+                            //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", JedisTempStorage.Temp_INPUT_MAP);
+                            JedisTempStorage.Temp_INPUT_MAP.clear();
                             client.update(stream);
+                            //System.out.println(ResponceList.class.getCanonicalName());
                         }
                     }
                     Thread.sleep(2);
@@ -56,8 +66,16 @@ public class ResponceList {
                 try {
                     synchronized (JedisTempStorage.Temp_INTERCONNECT_MAP) {
                         if(!JedisTempStorage.Temp_INTERCONNECT_MAP.isEmpty()) {
-                            DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Interconnect", JedisTempStorage.Temp_INTERCONNECT_MAP);
+                            //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Interconnect", JedisTempStorage.Temp_INTERCONNECT_MAP);
+                            HashMap<Integer, Object> stream = new HashMap<>();
+                            stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
+                            stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Interconnect");
+                            List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INTERCONNECT_MAP.stream().toList());
+                            stream.put(1, temp);
+                            //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", JedisTempStorage.Temp_INPUT_MAP);
+                            JedisTempStorage.Temp_INTERCONNECT_MAP.clear();
                             client.update(stream);
+                            //System.out.println(ResponceList.class.getCanonicalName());
                         }
                     }
                     Thread.sleep(2);
@@ -71,8 +89,14 @@ public class ResponceList {
                 try {
                     synchronized (JedisTempStorage.Temp_INTERCONNECT2_MAP) {
                         if(!JedisTempStorage.Temp_INTERCONNECT2_MAP.isEmpty()) {
-                            DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Chat", JedisTempStorage.Temp_INTERCONNECT2_MAP);
+                            HashMap<Integer, Object> stream = new HashMap<>();
+                            stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
+                            stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Chat");
+                            List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INTERCONNECT2_MAP.stream().toList());
+                            stream.put(1, temp);
+                            JedisTempStorage.Temp_INTERCONNECT2_MAP.clear();
                             client.update(stream);
+                            //System.out.println(ResponceList.class.getCanonicalName());
                         }
                     }
                     Thread.sleep(2);

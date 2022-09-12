@@ -229,6 +229,14 @@ public class SystemUtils {
         }
     }
 
+    public static void error_logger(String message) {
+        System.out.println("[ERROR] " + message);
+    }
+
+    public static void logger(String message) {
+        System.out.println(message);
+    }
+
     public void MainChatProcced(Player p, String UUID, String k) {
         new Thread( () -> {
             if(!p.hasPermission("faxcore.chatbypass")) {
