@@ -5,6 +5,7 @@ import com.itndev.factions.Dump.MySQLDump;
 import com.itndev.factions.Listener.PlayerListener;
 import com.itndev.factions.Main;
 import com.itndev.factions.RedisStreams.StaticVal;
+import com.itndev.factions.SocketConnection.Client.NettyClient;
 import com.itndev.factions.SocketConnection.IO.ResponceList;
 import com.itndev.factions.Storage.CachedStorage;
 import com.itndev.factions.Storage.Faction.FactionStorage;
@@ -266,8 +267,8 @@ public class JedisManager {
                         stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Output");
                         stream.put(1, str);
                         //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", str);
-                        ResponceList.get().update(stream);
-                    } catch (SQLException | IOException e) {
+                        NettyClient.getConnection().writeAndFlush(stream);
+                    } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 }
@@ -397,8 +398,8 @@ public class JedisManager {
                         stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Output");
                         stream.put(1, str);
                         //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", str);
-                        ResponceList.get().update(stream);
-                    } catch (SQLException | IOException e) {
+                        NettyClient.getConnection().writeAndFlush(stream);
+                    } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 }

@@ -1,4 +1,4 @@
-package com.itndev.factions.SocketConnection.Client;
+package com.itndev.factions.SocketConnection.Client.Old;
 
 import com.itndev.FaxLib.Utils.Data.DataStream;
 import com.itndev.factions.Jedis.JedisManager;

@@ -6,7 +6,7 @@
 
     <groupId>com.itndev</groupId>
     <artifactId>Factions</artifactId>
-    <version>FRONTEND-BETA-1.6.6</version>
+    <version>FRONTEND-BETA-1.6.7</version>
     <packaging>jar</packaging>
 
     <name>Factions</name>
@@ -26,6 +26,7 @@
                 <configuration>
                     <source>16</source>
                     <target>16</target>
+
                 </configuration>
             </plugin>
             <plugin>
@@ -40,6 +41,26 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludeScope>system</excludeScope>
+                            <excludes>META-INF/*.SF,META-INF/*.DSA,META-INF/*.RSA</excludes>
+                            <excludeGroupIds>junit,org.mockito,org.hamcrest</excludeGroupIds>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -104,6 +125,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.82.Final</version>
+        </dependency>
+        <dependency>
             <groupId>io.lettuce</groupId>
             <artifactId>lettuce-core</artifactId>
             <version>6.1.6.RELEASE</version>
@@ -155,6 +181,11 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.65</version>
         </dependency>
     </dependencies>
 </project>
