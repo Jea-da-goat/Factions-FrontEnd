@@ -1,8 +1,8 @@
-name: Factions
+name: Factions-FrontEnd
 version: '${project.version}'
 main: com.itndev.factions.Main
 api-version: 1.16
-depend: [ ProtocolLib, PlaceholderAPI, Vault, AdvancedBan ]
+depend: [ ProtocolLib, Vault, AdvancedBan ]
 authors: [ Itndev, Jea ]
 description: Faciton Server Plugin
 commands:

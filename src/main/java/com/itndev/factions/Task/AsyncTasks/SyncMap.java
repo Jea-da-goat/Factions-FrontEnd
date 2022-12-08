@@ -11,7 +11,7 @@ public class SyncMap {
     public void SyncStorageMap() {
         new Thread(() -> {
             while(true) {
-                HashMap<String, String> templands = (HashMap<String, String>) FactionStorage.LandToFaction.clone();
+                /*HashMap<String, String> templands = (HashMap<String, String>) FactionStorage.LandToFaction.clone();
                 synchronized (FactionStorage.AsyncLandToFaction) {
                     FactionStorage.AsyncLandToFaction.clear();
                     FactionStorage.AsyncLandToFaction.putAll(templands);
@@ -21,7 +21,7 @@ public class SyncMap {
                 synchronized (FactionStorage.AsyncOutPostToFaction) {
                     FactionStorage.AsyncOutPostToFaction.clear();
                     FactionStorage.AsyncOutPostToFaction.putAll(tempoutposts);
-                }
+                }*/
                 try {
                     Thread.sleep(50);
                 } catch (Exception e) {

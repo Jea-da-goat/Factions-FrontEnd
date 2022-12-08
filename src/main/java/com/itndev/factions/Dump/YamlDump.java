@@ -118,11 +118,11 @@ public class YamlDump {
         ConcurrentHashMap<String, String> TEMP_FactionRank = FactionStorage.FactionRank;
         DumpYaml(RedisDump.FixMap1(TEMP_FactionRank), "FactionRank");
 
-        ConcurrentHashMap<String, String> TEMP_FactionNameToFactionUUID = FactionStorage.FactionNameToFactionUUID;
-        DumpYaml(RedisDump.FixMap1(TEMP_FactionNameToFactionUUID), "FactionNameToFactionUUID");
+        HashMap<String, String> TEMP_FactionNameToFactionUUID = FactionStorage.FactionNameToFactionUUID;
+        DumpYaml(TEMP_FactionNameToFactionUUID, "FactionNameToFactionUUID");
 
-        ConcurrentHashMap<String, String> TEMP_FactionUUIDToFactionName = FactionStorage.FactionUUIDToFactionName;
-        DumpYaml(RedisDump.FixMap1(TEMP_FactionUUIDToFactionName), "FactionUUIDToFactionName");
+        HashMap<String, String> TEMP_FactionUUIDToFactionName = FactionStorage.FactionUUIDToFactionName;
+        DumpYaml(TEMP_FactionUUIDToFactionName, "FactionUUIDToFactionName");
 
         ConcurrentHashMap<String, String> TEMP_FactionOutPost = FactionStorage.FactionOutPost;
         DumpYaml(RedisDump.FixMap1(TEMP_FactionOutPost), "FactionOutPost");
@@ -130,8 +130,8 @@ public class YamlDump {
         ConcurrentHashMap<String, String> TEMP_FactionWarpLocations = FactionStorage.FactionWarpLocations;
         DumpYaml(RedisDump.FixMap1(TEMP_FactionWarpLocations), "FactionWarpLocations");
 
-        ConcurrentHashMap<String, String> TEMP_PlayerFaction = FactionStorage.PlayerFaction;
-        DumpYaml(RedisDump.FixMap1(TEMP_PlayerFaction), "PlayerFaction");
+        HashMap<String, String> TEMP_PlayerFaction = FactionStorage.PlayerFaction;
+        DumpYaml(TEMP_PlayerFaction, "PlayerFaction");
 
 
 
@@ -161,12 +161,12 @@ public class YamlDump {
 
         if (new File("FactionNameToFactionUUID.yml").exists()) {
             HashMap<String, String> TEMP_FactionNameToFactionUUID = (HashMap<String, String>) LoadYaml("FactionNameToFactionUUID");
-            FactionStorage.FactionNameToFactionUUID = RedisDump.FixMap2(TEMP_FactionNameToFactionUUID);
+            FactionStorage.FactionNameToFactionUUID = TEMP_FactionNameToFactionUUID;
         }
 
         if (new File("FactionUUIDToFactionName.yml").exists()) {
             HashMap<String, String> TEMP_FactionUUIDToFactionName = (HashMap<String, String>) LoadYaml("FactionUUIDToFactionName");
-            FactionStorage.FactionUUIDToFactionName = RedisDump.FixMap2(TEMP_FactionUUIDToFactionName);
+            FactionStorage.FactionUUIDToFactionName = TEMP_FactionUUIDToFactionName;
         }
 
         if (new File("FactionOutPost.yml").exists()) {
@@ -181,7 +181,7 @@ public class YamlDump {
 
         if (new File("PlayerFaction.yml").exists()) {
             HashMap<String, String> TEMP_PlayerFaction = (HashMap<String, String>) LoadYaml("PlayerFaction");
-            FactionStorage.PlayerFaction = RedisDump.FixMap2(TEMP_PlayerFaction);
+            FactionStorage.PlayerFaction = TEMP_PlayerFaction;
         }
 
         if (new File("LandToFaction.yml").exists()) {

@@ -18,13 +18,13 @@ public class FactionStorage {
 
     public static HashMap<String, String> DESTROYED_FactionUUIDToFactionName = new HashMap<>();
 
-    public static ConcurrentHashMap<String, String> AsyncLandToFaction = new ConcurrentHashMap<>();
+    //public static HashMap<String, String> AsyncLandToFaction = new HashMap<>();
 
-    public static ConcurrentHashMap<String, String> PlayerFaction = new ConcurrentHashMap<>();
+    public static HashMap<String, String> PlayerFaction = new HashMap<>();
 
-    public static ConcurrentHashMap<String, String> FactionUUIDToFactionName = new ConcurrentHashMap<>();
+    public static HashMap<String, String> FactionUUIDToFactionName = new HashMap<>();
 
-    public static ConcurrentHashMap<String, String> FactionNameToFactionUUID = new ConcurrentHashMap<>();
+    public static HashMap<String, String> FactionNameToFactionUUID = new HashMap<>();
 
     public static ConcurrentHashMap<String, String> FactionNameToFactionName = new ConcurrentHashMap<>();
 
@@ -57,7 +57,7 @@ public class FactionStorage {
 
     public static HashMap<String, String> OutPostToFaction = new HashMap<>();
 
-    public static ConcurrentHashMap<String, String> AsyncOutPostToFaction = new ConcurrentHashMap<>();
+    //public static ConcurrentHashMap<String, String> AsyncOutPostToFaction = new ConcurrentHashMap<>();
 
     public static HashMap<String, ArrayList<String>> FactionToOutPost = new HashMap<>();
 
@@ -114,7 +114,7 @@ public class FactionStorage {
             }
         } else if(args[1].equalsIgnoreCase("LandToFaction")) {
             if(args.length > 6 && args[6].equalsIgnoreCase(Main.ServerName)) {
-                if(args[2].equalsIgnoreCase("add")) {
+                /*if(args[2].equalsIgnoreCase("add")) {
                     String key = args[3]; //키
                     String value = args[5]; //추가하고 싶은 값
                     if(args[4].equalsIgnoreCase("add")) {
@@ -125,7 +125,7 @@ public class FactionStorage {
                 } else if(args[2].equalsIgnoreCase("remove")) {
                     String key = args[3];
                     FactionStorage.AsyncLandToFaction.remove(key);
-                }
+                }*/
                 return;
             }
             if(args[2].equalsIgnoreCase("add")) {
@@ -133,15 +133,15 @@ public class FactionStorage {
                 String value = args[5]; //추가하고 싶은 값
                 if(args[4].equalsIgnoreCase("add")) {
                     FactionStorage.LandToFaction.put(key, value);
-                    FactionStorage.AsyncLandToFaction.put(key, value);
+                    //FactionStorage.AsyncLandToFaction.put(key, value);
                 } else if(args[4].equalsIgnoreCase("remove")) {
                     FactionStorage.LandToFaction.remove(key);
-                    FactionStorage.AsyncLandToFaction.remove(key);
+                    //FactionStorage.AsyncLandToFaction.remove(key);
                 }
             } else if(args[2].equalsIgnoreCase("remove")) {
                 String key = args[3];
                 FactionStorage.LandToFaction.remove(key);
-                FactionStorage.AsyncLandToFaction.remove(key);
+                //FactionStorage.AsyncLandToFaction.remove(key);
             }
         } else if(args[1].equalsIgnoreCase("FactionRank")) {
             if(args[2].equalsIgnoreCase("add")) {
@@ -334,17 +334,15 @@ public class FactionStorage {
                 String value = args[5]; //추가하고 싶은 값
                 if(args[4].equalsIgnoreCase("add")) {
                     FactionStorage.OutPostToFaction.put(key, value);
-                    FactionStorage.AsyncOutPostToFaction.put(key, value);
+                    //FactionStorage.OutPostToFaction.put(key, value);
                 } else if(args[4].equalsIgnoreCase("remove")) {
-                    if(FactionStorage.OutPostToFaction.containsKey(key)) {
-                        FactionStorage.OutPostToFaction.remove(key);
-                        FactionStorage.AsyncOutPostToFaction.remove(key);
-                    }
+                    //FactionStorage.OutPostToFaction.remove(key);
+                    FactionStorage.OutPostToFaction.remove(key);
                 }
             } else if(args[2].equalsIgnoreCase("remove")) {
                 String key = args[3];
                 FactionStorage.OutPostToFaction.remove(key);
-                FactionStorage.AsyncOutPostToFaction.remove(key);
+                //FactionStorage.OutPostToFaction.remove(key);
             }
         } else if(args[1].equalsIgnoreCase("FactionToOutPost")) {
             if(args.length > 6 && args[6].equalsIgnoreCase(Main.ServerName)) {

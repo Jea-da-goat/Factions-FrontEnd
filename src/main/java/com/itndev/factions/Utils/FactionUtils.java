@@ -373,7 +373,7 @@ public class FactionUtils {
     }
 
     public static Boolean isMyOutPost(String FactionUUID, Location loc) {
-        return FactionStorage.AsyncOutPostToFaction.get(FactionUtils.getChunkKey(loc)).equals(FactionUUID);
+        return FactionStorage.OutPostToFaction.get(FactionUtils.getChunkKey(loc)).equals(FactionUUID);
     }
 
     public static Boolean isFactionsClaim(Location loc, String FactionUUID) {
@@ -682,8 +682,8 @@ public class FactionUtils {
     //=============================================================
 
     public static String AsyncWhosClaim(Location loc) {
-        if(FactionStorage.AsyncLandToFaction.containsKey(getChunkKey(loc))) {
-            return FactionStorage.AsyncLandToFaction.get(getChunkKey(loc));
+        if(FactionStorage.LandToFaction.containsKey(getChunkKey(loc))) {
+            return FactionStorage.LandToFaction.get(getChunkKey(loc));
         }
         return null;
     }

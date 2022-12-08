@@ -354,7 +354,7 @@ public class RedisConnection {
         //FactionStorage.AsyncOutPostToFaction;
         tempmap = (HashMap<String, String>) setcommands.hmget(key + "-" + "FactionInfoList");
         FactionStorage.FactionInfoList = ConcurrentMapListConvert(tempmap);
-        FactionStorage.FactionNameToFactionUUID = (ConcurrentHashMap<String, String>) setcommands.hmget(key + "-" + "FactionNameToFactionUUID");
+        FactionStorage.FactionNameToFactionUUID = (HashMap<String, String>) setcommands.hmget(key + "-" + "FactionNameToFactionUUID");
 
         FactionStorage.FactionOutPost = (ConcurrentHashMap<String, String>) setcommands.hmget(key + "-" + "FactionOutPost");
 
@@ -369,10 +369,10 @@ public class RedisConnection {
         tempmap = (HashMap<String, String>) setcommands.hmget(key + "-" + "FactionToOutPost");
         FactionStorage.FactionToOutPost = MapListConvert(tempmap);
 
-        FactionStorage.FactionUUIDToFactionName = (ConcurrentHashMap<String, String>) setcommands.hmget(key + "-" + "FactionUUIDToFactionName");
+        FactionStorage.FactionUUIDToFactionName = (HashMap<String, String>) setcommands.hmget(key + "-" + "FactionUUIDToFactionName");
         FactionStorage.FactionWarpLocations = (ConcurrentHashMap<String, String>) setcommands.hmget(key + "-" + "FactionWarpLocations");
         FactionStorage.OutPostToFaction = (HashMap<String, String>) setcommands.hmget(key + "-" + "OutPostToFaction");
-        FactionStorage.PlayerFaction = (ConcurrentHashMap<String, String>) setcommands.hmget(key + "-" + "PlayerFaction");
+        FactionStorage.PlayerFaction = (HashMap<String, String>) setcommands.hmget(key + "-" + "PlayerFaction");
 
         UserInfoStorage.namename = (ConcurrentHashMap<String, String>) setcommands.hmget(key + "-" + "namename");
         UserInfoStorage.uuidname = (ConcurrentHashMap<String, String>) setcommands.hmget(key + "-" + "uuidname");

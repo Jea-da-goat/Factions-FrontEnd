@@ -11,6 +11,8 @@ import com.itndev.factions.Storage.StorageIO.UserInfoStorageIOManager;
 import com.itndev.factions.Task.AsyncTasks.SyncMap;
 import com.itndev.factions.Utils.DiscordAuth.DiscordAuth;
 import com.itndev.factions.Utils.DiscordAuth.DiscordCommand;
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.clip.placeholderapi.PlaceholderHook;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
@@ -24,14 +26,20 @@ public class RegisterStuff {
         FactionStorageIOManager.restoreFactionInfo();
         UserInfoStorageIOManager.restoreUserInfo();
         ValidChecker.setvalid();
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            System.out.println("Hooking into PlaceHolderAPI...");
-            new PlaceHolderManager().register();
-        } else {
-            System.out.println("PlaceHolderAPI not Found...");
+        try {
+            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                System.out.println("Hooking into PlaceHolderAPI...");
+                PlaceHolderManager papi = new PlaceHolderManager();
+                papi.register();
+            } else {
+                System.out.println("PlaceHolderAPI not Found...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        new SyncMap().SyncStorageMap();
+
+        //new SyncMap().SyncStorageMap();
         DiscordAuth.LoopCheckAuth();
     }
 

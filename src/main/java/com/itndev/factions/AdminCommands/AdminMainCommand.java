@@ -51,7 +51,9 @@ public class AdminMainCommand implements CommandExecutor {
             SystemUtils.sendmessage(p, SystemUtils.colorize("&c&lERROR &r&f존재하지 않는 명령어"));
             return;
         }
-        if(args[0].equalsIgnoreCase("reloadfactionbaltop")) {
+        if(args[0].equalsIgnoreCase("reconnect")) {
+
+        } else if(args[0].equalsIgnoreCase("reloadfactionbaltop")) {
             FactionList.FactionTopExecute(100L);
             SystemUtils.sendmessage(p, "&c&lSUCESS &r&7국가 금고 정보 로컬 데이터 리프레시 중...");
         } else if(args[0].equalsIgnoreCase("buildfactionbaltop")) {

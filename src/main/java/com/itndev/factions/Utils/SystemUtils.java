@@ -294,7 +294,7 @@ public class SystemUtils {
                 for(String temp : message.split("")) {
                     finalmessage = finalmessage + temp + "&f";
                 }
-                String format = (String) Objects.<String>requireNonNull("&a[&fLv.%mcmmo_power_level%&a]&r%itndevfactions_formatfactionname%%itndevfaction_formatrank%{prefix}{name} {suffix}&8:: &r{message}".replace("{world}", player.getWorld().getName()).replace("{prefix}", getPrefix(player)).replace("{prefixes}", getPrefixes(player)).replace("{name}", player.getName()).replace("{suffix}", getSuffix(player)).replace("{suffixes}", getSuffixes(player)).replace("{username-color}", (playerMeta(player).getMetaValue("username-color") != null) ? playerMeta(player).getMetaValue("username-color") : ((groupMeta(group).getMetaValue("username-color") != null) ? groupMeta(group).getMetaValue("username-color") : "")).replace("{message-color}", (playerMeta(player).getMetaValue("message-color") != null) ?
+                String format = (String) Objects.<String>requireNonNull(/*"&a[&fLv.0&a]*/"&r%itndevfactions_formatfactionname%%itndevfaction_formatrank%{prefix}{name} {suffix}&8:: &r{message}".replace("{world}", player.getWorld().getName()).replace("{prefix}", getPrefix(player)).replace("{prefixes}", getPrefixes(player)).replace("{name}", player.getName()).replace("{suffix}", getSuffix(player)).replace("{suffixes}", getSuffixes(player)).replace("{username-color}", (playerMeta(player).getMetaValue("username-color") != null) ? playerMeta(player).getMetaValue("username-color") : ((groupMeta(group).getMetaValue("username-color") != null) ? groupMeta(group).getMetaValue("username-color") : "")).replace("{message-color}", (playerMeta(player).getMetaValue("message-color") != null) ?
                         playerMeta(player).getMetaValue("message-color") : ((groupMeta(group).getMetaValue("message-color") != null) ?
                         groupMeta(group).getMetaValue("message-color") : "")));
                 if(areachat) {
@@ -328,7 +328,7 @@ public class SystemUtils {
                 } else {
                     String Dformat = format.replace("{message}", (player.hasPermission("lpc.colorcodes") && player.hasPermission("lpc.rgbcodes")) ?
                             translateHexColorCodes(colorize(finalmessage)) : (player.hasPermission("lpc.colorcodes") ? colorize(finalmessage) : (player.hasPermission("lpc.rgbcodes") ?
-                            translateHexColorCodes(finalmessage) : finalmessage))).replace("%itndevfactions_formatfactionname%"," " +  FactionUtils.getFormattedFaction2(UUID)).replace("%itndevfaction_formatrank%", FactionUtils.getFormattedRank2(UUID));
+                            translateHexColorCodes(finalmessage) : finalmessage))).replace("%itndevfactions_formatfactionname%","" +  FactionUtils.getFormattedFaction2(UUID)).replace("%itndevfaction_formatrank%", FactionUtils.getFormattedRank2(UUID));
                     Dformat = PlaceHolderReplace(p, Dformat);
                     String SPLITTER_INNER2 = "</SPLIT:=:1C4FD2F>";
                     JedisTempStorage.AddCommandToQueue_INNER2(p.getUniqueId() + SPLITTER_INNER2 + Dformat);

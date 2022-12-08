@@ -366,6 +366,7 @@ public class PlayerListener implements Listener {
         if(ChatColor.stripColor(e.getMessage()).isBlank()) {
             return;
         }
+        k = ChatColor.stripColor(k);
         if(!Socket.Connected) {
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a&o&l[ &r&f국가 &a&o&l] &r&f데이터베이스 서버와의 연결이 끊김으로써 채팅이 잠깁니다"));
             return;
@@ -391,7 +392,7 @@ public class PlayerListener implements Listener {
     /*public void onTeleport(PlayerTeleportEvent e) {
         TeleportInvisFix.onTeleport(e);
     }*/
-    @Deprecated
+
     @EventHandler(ignoreCancelled = true)
     public void onclick(InventoryClickEvent e) {
         if(e.getView().getTitle().contains(SystemUtils.colorize("&3&l[ &r&f국가 워프메뉴 &3&l]"))) {
@@ -422,7 +423,6 @@ public class PlayerListener implements Listener {
                                 if(TempStorage.TeleportLocation.get(UUID).equals(time)) {
                                     SystemUtils.sendfactionmessage(sender, "&r&f전초기지 " + OutPostName + "으로 이동합니다");
                                     sender.teleport(loc);
-                                    return;
                                 }
                             }
                             SystemUtils.sendfactionmessage(sender, "&r&f이동이 취소되었습니다");
@@ -432,6 +432,13 @@ public class PlayerListener implements Listener {
                     SystemUtils.sendfactionmessage(sender, "&r&c5초&r&f후 전초기지 " + OutPostName + "으로 이동합니다");
                     Long time = System.currentTimeMillis();
                     TempStorage.TeleportLocation.put(sender.getUniqueId().toString(), time);
+                    /*new Thread(() -> {
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }).start();*/
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -439,19 +446,19 @@ public class PlayerListener implements Listener {
                                 if(TempStorage.TeleportLocation.get(UUID).equals(time)) {
                                     SystemUtils.SendtoServer(sender, TargetServerName);
                                     FactionUtils.WarpLocation(UUID, TargetServerName, temp222[1], false);
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            FactionUtils.WarpLocation(UUID, TargetServerName, temp222[1], true);
+                                    new Thread(() -> {
+                                        try {
+                                            Thread.sleep(20000);
+                                        } catch (InterruptedException ex) {
+                                            ex.printStackTrace();
                                         }
-                                    }.runTaskLaterAsynchronously(Main.getInstance(), 400L);
-                                    return;
+                                        FactionUtils.WarpLocation(UUID, TargetServerName, temp222[1], true);
+                                    }).start();
                                 }
                             }
                             SystemUtils.sendfactionmessage(sender, "&r&f이동이 취소되었습니다");
                         }
                     }.runTaskLater(Main.getInstance(), 100L);
-
                     //
                     //서버로 이동
                     //그다음에 텔레포트

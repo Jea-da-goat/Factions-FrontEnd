@@ -39,7 +39,7 @@ public class MySQLDump {
         }
 
         try {
-            FactionStorage.FactionNameToFactionUUID = MapFixer.get().Fixer_1_2(LoadHASHMAP("FactionNameToFactionUUID"));
+            FactionStorage.FactionNameToFactionUUID = LoadHASHMAP("FactionNameToFactionUUID");
         } catch (Exception e) {
             SystemUtils.error_logger(e.getMessage());
         }
@@ -75,7 +75,7 @@ public class MySQLDump {
         }
 
         try {
-            FactionStorage.FactionUUIDToFactionName = MapFixer.get().Fixer_1_2(LoadHASHMAP("FactionUUIDToFactionName"));
+            FactionStorage.FactionUUIDToFactionName = LoadHASHMAP("FactionUUIDToFactionName");
         } catch (Exception e) {
             SystemUtils.error_logger(e.getMessage());
         }
@@ -93,7 +93,7 @@ public class MySQLDump {
         }
 
         try {
-            FactionStorage.PlayerFaction = MapFixer.get().Fixer_1_2(LoadHASHMAP("PlayerFaction"));
+            FactionStorage.PlayerFaction = LoadHASHMAP("PlayerFaction");
         } catch (Exception e) {
             SystemUtils.error_logger(e.getMessage());
         }

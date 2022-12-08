@@ -187,11 +187,11 @@ public class JedisManager {
                 new Thread( () -> {
                     HashMap<String, String> templands = FactionStorage.LandToFaction;
                     for(String key : templands.keySet()) {
-                        FactionStorage.AsyncLandToFaction.put(key, templands.get(key));
+                        FactionStorage.LandToFaction.put(key, templands.get(key));
                     }
                     HashMap<String, String> tempoutposts = FactionStorage.OutPostToFaction;
                     for(String key : tempoutposts.keySet()) {
-                        FactionStorage.AsyncOutPostToFaction.put(key, tempoutposts.get(key));
+                        FactionStorage.LandToFaction.put(key, tempoutposts.get(key));
                     }
                 }).start();
 

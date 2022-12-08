@@ -26,7 +26,7 @@ public class PlaceHolderManager extends PlaceholderExpansion {
         return "1.1.5";
     }
 
-    @Override
+    /*@Override
     public boolean canRegister() {
         return true;
     }
@@ -35,6 +35,7 @@ public class PlaceHolderManager extends PlaceholderExpansion {
     public boolean persist() {
         return true;
     }
+    */
 
     @Override
     public String onPlaceholderRequest(Player p, String params) {
