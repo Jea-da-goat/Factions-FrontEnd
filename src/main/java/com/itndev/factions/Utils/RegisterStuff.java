@@ -5,14 +5,11 @@ import com.itndev.factions.FactionCommands.FactionCommandTabComplete;
 import com.itndev.factions.FactionCommands.FactionMainCommand;
 import com.itndev.factions.Listener.PlayerListener;
 import com.itndev.factions.Main;
-import com.itndev.factions.PlaceHolder.PlaceHolderManager;
+import com.itndev.factions.PlaceHolder.PlaceHolderAPI;
 import com.itndev.factions.Storage.StorageIO.FactionStorageIOManager;
 import com.itndev.factions.Storage.StorageIO.UserInfoStorageIOManager;
-import com.itndev.factions.Task.AsyncTasks.SyncMap;
 import com.itndev.factions.Utils.DiscordAuth.DiscordAuth;
 import com.itndev.factions.Utils.DiscordAuth.DiscordCommand;
-import me.clip.placeholderapi.PlaceholderAPI;
-import me.clip.placeholderapi.PlaceholderHook;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
@@ -29,7 +26,7 @@ public class RegisterStuff {
         try {
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 System.out.println("Hooking into PlaceHolderAPI...");
-                PlaceHolderManager papi = new PlaceHolderManager();
+                PlaceHolderAPI papi = new PlaceHolderAPI();
                 papi.register();
             } else {
                 System.out.println("PlaceHolderAPI not Found...");

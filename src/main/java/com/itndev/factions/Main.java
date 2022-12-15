@@ -56,15 +56,13 @@ public class Main extends JavaPlugin {
         hikariCP.createHikariTable();
 
         //JedisManager.jedisTest();
-
+        setupEconomy();
         RegisterStuff.RegisterFactionCommands();
         RegisterStuff.RegisterListener();
         RegisterStuff.onStartup();
 
         StorageDir.SetupStorage();
         ConfigIO.read();
-
-        setupEconomy();
 
         //RedisConnection.RedisConnect();
         /*RedisConnection.RedisStreamWriter();

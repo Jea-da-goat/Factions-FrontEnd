@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class PlaceHolderManager extends PlaceholderExpansion {
+public class PlaceHolderAPI extends PlaceholderExpansion {
     @Override
     public String getIdentifier() {
         return "factions";
