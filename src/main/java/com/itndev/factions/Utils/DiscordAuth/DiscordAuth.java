@@ -1,6 +1,7 @@
 package com.itndev.factions.Utils.DiscordAuth;
 
 import com.itndev.factions.Config.Config;
+import com.itndev.factions.Config.Functions;
 import com.itndev.factions.Main;
 import com.itndev.factions.Utils.BackendIO;
 import com.itndev.factions.Utils.SystemUtils;
@@ -16,22 +17,24 @@ public class DiscordAuth {
     public static HashMap<String, String> DISCORD_AUTH_INFO = new HashMap<>();
 
     public static void LoopCheckAuth() {
-        new BukkitRunnable() {
+        if(Functions.DISCORD_AUTH_ENABLE) {
+            new BukkitRunnable() {
 
-            @Override
-            public void run() {
-                for(Player p : Bukkit.getOnlinePlayers()) {
-                    if(!isAuth(p.getUniqueId().toString())) {
-                        SystemUtils.sendmessage(p, "&c&l================================");
-                        SystemUtils.sendmessage(p, "&e&l주의사항");
-                        SystemUtils.sendmessage(p, "&f공식 디스코드 서버의 계정연동 채널에서");
-                        SystemUtils.sendmessage(p, "!연동 <닉네임> 으로 연동을 해주시기 바랍니다");
-                        SystemUtils.sendmessage(p, "&3&lDiscord &7: " + Config.DiscordLink);
-                        SystemUtils.sendmessage(p, "&c&l================================");
+                @Override
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (!isAuth(p.getUniqueId().toString())) {
+                            SystemUtils.sendmessage(p, "&c&l================================");
+                            SystemUtils.sendmessage(p, "&e&l주의사항");
+                            SystemUtils.sendmessage(p, "&f공식 디스코드 서버의 계정연동 채널에서");
+                            SystemUtils.sendmessage(p, "!연동 <닉네임> 으로 연동을 해주시기 바랍니다");
+                            SystemUtils.sendmessage(p, "&3&lDiscord &7: " + Config.DiscordLink);
+                            SystemUtils.sendmessage(p, "&c&l================================");
+                        }
                     }
                 }
-            }
-        }.runTaskTimerAsynchronously(Main.getInstance(), 60L, 60L);
+            }.runTaskTimerAsynchronously(Main.getInstance(), 60L, 60L);
+        }
     }
 
     public static Boolean isAuth(String UUID) {
@@ -56,16 +59,22 @@ public class DiscordAuth {
         BackendIO.SendCMD_BACKEND(UUID, args, "DISCORD_VERIFY_AUTH");
     }
 
-    public static void AcceptAuthInfo(String UUID, String DiscordTag) {
+    public static void AcceptAuthInfo(String UUID, String DiscordTagE) {
+        String DiscordTag = DiscordTagE;
+        if(!Functions.DISCORD_AUTH_ENABLE) {
+            DiscordTag = "FORCE_DISABLE=TRUE";
+        }
         if(!DiscordTag.equalsIgnoreCase("NULL")) {
             DISCORD_AUTH_INFO.put(UUID, DiscordTag);
-            OfflinePlayer op = Bukkit.getOfflinePlayer(java.util.UUID.fromString(UUID));
-            if(op.isOnline()) {
-                Player p = (Player) op;
-                SystemUtils.sendmessage(p, "&3&m-------------------------------------");
-                SystemUtils.sendmessage(p, "&9&l디스코드 연동인증이 확인되었습니다.");
-                SystemUtils.sendmessage(p, "&7현재 당신의 계정은 " + DiscordTag + " 와 연동되어 있습니다");
-                SystemUtils.sendmessage(p, "&3&m-------------------------------------");
+            if(Functions.DISCORD_AUTH_ENABLE) {
+                OfflinePlayer op = Bukkit.getOfflinePlayer(java.util.UUID.fromString(UUID));
+                if (op.isOnline()) {
+                    Player p = (Player) op;
+                    SystemUtils.sendmessage(p, "&3&m-------------------------------------");
+                    SystemUtils.sendmessage(p, "&9&l디스코드 연동인증이 확인되었습니다.");
+                    SystemUtils.sendmessage(p, "&7현재 당신의 계정은 " + DiscordTag + " 와 연동되어 있습니다");
+                    SystemUtils.sendmessage(p, "&3&m-------------------------------------");
+                }
             }
         } else {
             DISCORD_AUTH_INFO.remove(UUID);
