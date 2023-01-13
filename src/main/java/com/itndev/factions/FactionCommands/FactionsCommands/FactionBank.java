@@ -69,11 +69,9 @@ public class FactionBank {
                     }
                 }
 
-                String TakeorGet = null;
-
-                if (Take) {
-                    TakeorGet = "&a출금";
-                    Main.econ.depositPlayer(Bukkit.getOfflinePlayer(java.util.UUID.fromString(UUID)), amount);
+                if (!Take) {
+                    //Main.econ.depositPlayer(Bukkit.getOfflinePlayer(java.util.UUID.fromString(UUID)), amount);
+                    Main.econ.withdrawPlayer(Bukkit.getOfflinePlayer(java.util.UUID.fromString(UUID)), amount);
                 }
                 BackendIO.SendCMD_BACKEND(UUID, args, df.format(bal));
             } else {
