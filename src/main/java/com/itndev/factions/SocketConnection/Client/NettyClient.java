@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static java.lang.Thread.*;
+
 public class NettyClient {
     public static String HOST;// = System.getProperty("host", "127.0.0.1");
     public static int PORT;// = Integer.parseInt(System.getProperty("port", "8992"));
@@ -57,12 +59,32 @@ public class NettyClient {
             new Thread(() -> {
                 while (true) {
                     try {
+                        synchronized (JedisTempStorage.MESSAGING_CHANNEL) {
+                            if(!JedisTempStorage.MESSAGING_CHANNEL.isEmpty()) {
+                                HashMap<Integer, Object> stream = new HashMap<>();
+                                stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
+                                stream.put(StaticVal.getDataTypeArgs(), "MESSAGING_CHANNEL");
+                                List<String> temp = new ArrayList<>(JedisTempStorage.MESSAGING_CHANNEL);
+                                stream.put(1, temp);
+                                JedisTempStorage.MESSAGING_CHANNEL.clear();
+                                NettyClient.channel.writeAndFlush(stream);
+                            }
+                        }
+                        sleep(2);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+            new Thread(() -> {
+                while (true) {
+                    try {
                         synchronized (JedisTempStorage.Temp_INPUT_MAP) {
                             if(!JedisTempStorage.Temp_INPUT_MAP.isEmpty()) {
                                 HashMap<Integer, Object> stream = new HashMap<>();
                                 stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
                                 stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Output");
-                                List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INPUT_MAP.stream().toList());
+                                List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INPUT_MAP);
                                 stream.put(1, temp);
                                 //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", JedisTempStorage.Temp_INPUT_MAP);
                                 JedisTempStorage.Temp_INPUT_MAP.clear();
@@ -70,7 +92,7 @@ public class NettyClient {
                                 //System.out.println(ResponceList.class.getCanonicalName());
                             }
                         }
-                        Thread.sleep(2);
+                        sleep(2);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -85,7 +107,7 @@ public class NettyClient {
                                 HashMap<Integer, Object> stream = new HashMap<>();
                                 stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
                                 stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Interconnect");
-                                List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INTERCONNECT_MAP.stream().toList());
+                                List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INTERCONNECT_MAP);
                                 stream.put(1, temp);
                                 //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", JedisTempStorage.Temp_INPUT_MAP);
                                 JedisTempStorage.Temp_INTERCONNECT_MAP.clear();
@@ -93,7 +115,7 @@ public class NettyClient {
                                 //System.out.println(ResponceList.class.getCanonicalName());
                             }
                         }
-                        Thread.sleep(2);
+                        sleep(2);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -107,22 +129,20 @@ public class NettyClient {
                                 HashMap<Integer, Object> stream = new HashMap<>();
                                 stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
                                 stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Chat");
-                                List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INTERCONNECT2_MAP.stream().toList());
+                                List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INTERCONNECT2_MAP);
                                 stream.put(1, temp);
                                 JedisTempStorage.Temp_INTERCONNECT2_MAP.clear();
                                 NettyClient.channel.writeAndFlush(stream);
                                 //System.out.println(ResponceList.class.getCanonicalName());
                             }
                         }
-                        Thread.sleep(2);
+                        sleep(2);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }).start();
-            while (!Main.ShutDown) {
-                Thread.onSpinWait();
-            }
+            //while (!Main.ShutDown) onSpinWait();
             /*for (;;) {
                 String line = in.readLine();
                 if (line == null) {
@@ -143,7 +163,7 @@ public class NettyClient {
             // Wait until all messages are flushed before closing the channel.
         } finally {
             // The connection is closed automatically on shutdown.
-            group.shutdownGracefully();
+            //group.shutdownGracefully();
         }
     }
 }

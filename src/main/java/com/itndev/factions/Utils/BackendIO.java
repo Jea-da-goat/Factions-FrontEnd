@@ -2,24 +2,25 @@ package com.itndev.factions.Utils;
 
 import com.itndev.factions.Jedis.JedisTempStorage;
 import com.itndev.factions.Main;
+import com.itndev.factions.RedisStreams.StaticVal;
 
 public class BackendIO {
 
-    private static String CMD_SPLITTER = "<CMD>&%CMD_12%<CMD>";
+    private static String CMD_SPLITTER = " ";
     private static String CMD_Announce = "<&@CMD>";
     private static String ADD_Announce = "<&@ADD>";
     private static String USER_Announce = "<&@USER>";
     private static String CMD_ARGS_SPLITTER = ":=:";
 
     public static void SendCMD_BACKEND(String UUID, String[] args, String Additional) {
-        String CMD = CMD_SPLITTER;
-        CMD = CMD + Main.ServerName + CMD_SPLITTER + USER_Announce + UUID + CMD_SPLITTER + CMD_Announce + Args2String_V(args, CMD_ARGS_SPLITTER) + CMD_SPLITTER + ADD_Announce + Additional + CMD_SPLITTER;
+        String CMD = StaticVal.getCmdAnnouncer() + " ";
+        CMD = CMD + Main.ServerName + CMD_SPLITTER + USER_Announce + CommonUtils.String2Byte(UUID) + CMD_SPLITTER + CMD_Announce + CommonUtils.String2Byte(Args2String_V(args, CMD_ARGS_SPLITTER)) + CMD_SPLITTER + ADD_Announce + CommonUtils.String2Byte(Additional) + CMD_SPLITTER;
         JedisTempStorage.AddCommandToQueue_INPUT(CMD);
     }
 
     public static void KeepAlive(String UUID, String Nothing) {
-        String CMD = CMD_SPLITTER;
-        CMD = CMD + Main.ServerName + CMD_SPLITTER + USER_Announce + UUID + CMD_SPLITTER + CMD_Announce + "KEEPALIVECHECK_REDISCLEANUP" + CMD_SPLITTER + ADD_Announce + Nothing + CMD_SPLITTER;
+        String CMD = StaticVal.getCmdAnnouncer() + " ";
+        CMD = CMD + Main.ServerName + CMD_SPLITTER + USER_Announce + CommonUtils.String2Byte(UUID) + CMD_SPLITTER + CMD_Announce + CommonUtils.String2Byte("KEEPALIVECHECK_REDISCLEANUP") + CMD_SPLITTER + ADD_Announce + CommonUtils.String2Byte(Nothing) + CMD_SPLITTER;
         JedisTempStorage.AddCommandToQueue_INPUT(CMD);
     }
 
@@ -27,9 +28,9 @@ public class BackendIO {
         String k = "";
         for(int c = 0; c < args.length; c++) {
             if(c == args.length - 1) {
-                k = k + args[c];
+                k = k + CommonUtils.String2Byte(args[c]);
             } else {
-                k = k + args[c] + replacement;
+                k = k + CommonUtils.String2Byte(args[c]) + replacement;
             }
         }
         return k;

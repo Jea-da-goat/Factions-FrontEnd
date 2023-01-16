@@ -11,6 +11,7 @@ import com.itndev.factions.Storage.CachedStorage;
 import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
 import com.itndev.factions.Utils.BackendIO;
+import com.itndev.factions.Utils.CommonUtils;
 import com.itndev.factions.Utils.DiscordAuth.DiscordAuth;
 import com.itndev.factions.Utils.FactionUtils;
 import com.itndev.factions.Utils.SystemUtils;
@@ -215,6 +216,12 @@ public class JedisManager {
         if(c > 600) {
             String[] args = k.split(":=:");
             if(args[0].equalsIgnoreCase("update")) {
+                if(args.length > 6) {
+                    args[3] = CommonUtils.Byte2String(args[3]);
+                    args[5] = CommonUtils.Byte2String(args[5]);
+                } else if(args.length > 4) {
+                    args[3] = CommonUtils.Byte2String(args[3]);
+                }
                 if(args[1].equalsIgnoreCase("FactionToLand")
                         || args[1].equalsIgnoreCase("LandToFaction")
                         || args[1].equalsIgnoreCase("FactionRank")
@@ -252,8 +259,8 @@ public class JedisManager {
                     System.out.println("Pinged from Redis Database");
                 }
             } else if(args[0].equalsIgnoreCase("chat")) {
-                String playeruuid = args[1];
-                String message = args[2];
+                String playeruuid = CommonUtils.Byte2String(args[1]);
+                String message = CommonUtils.Byte2String(args[2]);
                 FactionUtils.FactionChat(playeruuid, message);
                 //utils.teamchat(playeruuid, message);
             } else if(args[0].equalsIgnoreCase("sync")) {
@@ -282,17 +289,17 @@ public class JedisManager {
                 //utils.teamnotify(playeruuid, targetuuid, message, trueorfalse);
             } else if(args[0].equalsIgnoreCase("notify")) {
 
-                String playeruuid = args[1];
-                String targetuuid = args[2];
-                String message = args[3];
-                String trueorfalse = args[4];
+                String playeruuid = CommonUtils.Byte2String(args[1]);
+                String targetuuid = CommonUtils.Byte2String(args[2]);
+                String message = CommonUtils.Byte2String(args[3]);
+                String trueorfalse = CommonUtils.Byte2String(args[4]);
                 FactionUtils.FactionNotify(playeruuid, targetuuid, message, trueorfalse);
                 //utils.teamnotify(playeruuid, targetuuid, message, trueorfalse);
             } else if(args[0].equalsIgnoreCase("warplocation")) {
-                String targetuuid = args[1];
+                String targetuuid = CommonUtils.Byte2String(args[1]);
                 String Server = args[2];
-                String stringlocation = args[3];
-                String expired = args[4];
+                String stringlocation = CommonUtils.Byte2String(args[3]);
+                String expired = CommonUtils.Byte2String(args[4]);
                 if(Main.ServerName.equalsIgnoreCase(Server)) {
                     if(!expired.equalsIgnoreCase("expired")) {
                         Location loc = SystemUtils.string2loc(stringlocation);

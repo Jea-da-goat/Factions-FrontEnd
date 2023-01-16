@@ -105,12 +105,12 @@ public class AdminMainCommand implements CommandExecutor {
 
         } else if(args[0].equalsIgnoreCase("getclock")) {
             SystemUtils.sendmessage(p, "&c&lINFO &7JEDIS SYNC CLOCK TIME : " + JedisManager.JEDISSYNCCLOCK);
-        } else if(args[0].equalsIgnoreCase("updatehashmap")) {
+        }/* else if(args[0].equalsIgnoreCase("updatehashmap")) {
             String updatecommand = SystemUtils.Args2String(args, 1);
             JedisTempStorage.AddCommandToQueue_INNER(updatecommand);
             SystemUtils.sendmessage(p, "&c&lINFO &r&7Added Command To Queue\n" +
                     "&r&7-> &r" + updatecommand);
-        } else if(args[0].equalsIgnoreCase("uploadstorage")) {
+        }*/ else if(args[0].equalsIgnoreCase("uploadstorage")) {
             if(args.length < 2) {
                 RedisConnection.UploadStorageToRedis(null);
                 SystemUtils.sendmessage(p, "&c&lINFO &r&7uploaded to redis without a key");
@@ -157,7 +157,7 @@ public class AdminMainCommand implements CommandExecutor {
                     "&r/factionadmin radiusclaimed &8&l: &r&7check chunk raidus of 5 chunks if any chunks are claimed\n" +
                     "&r/factionadmin checkfactionoutposthashmap &8&l: &r&7check faction outpost storage data\n" +
                     "&r/factionadmin getclock &8&l: &r&7get clock of the I/O thread\n" +
-                    "&r/factionadmin updatehashmap &8&l: &r&7manualy sends a command throught the INTERNAL I/O pipline\n" +
+                    //"&r/factionadmin updatehashmap &8&l: &r&7manualy sends a command throught the INTERNAL I/O pipline\n" +
                     "&r/factionadmin uploadstorage [keyname] &8&l: &r&7upload storage to database based on [keyname]\n" +
                     "&r/factionadmin loadfromstorage [keyname] &8&l: &r&7load storage from database based on [keyname]\n" +
                     "&r/factionadmin deletestorage [keyname]\n &8&l: &r&7deleted storage from database based on [keyname]\n" +

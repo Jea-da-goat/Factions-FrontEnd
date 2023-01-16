@@ -9,6 +9,7 @@ public class BungeeAPI {
     public static Boolean isOnline(String UUID) {
         return BungeeStorage.UUID_TO_CONNECTEDSERVER.containsKey(UUID);
     }
+    private static int FPlayerAmount = 0;
 
     public static String colorIFONLINE(String UUID) {
         if(isOnline(UUID)) {
@@ -28,5 +29,13 @@ public class BungeeAPI {
         ArrayList<String> Names = new ArrayList<>();
         BungeeStorage.UUID_TO_CONNECTEDSERVER.keySet().forEach(key -> Names.add(UserInfoUtils.getPlayerUUIDOriginName(key)));
         return Names;
+    }
+
+    public static void setFPlayerAmount(int amount) {
+        FPlayerAmount = amount;
+    }
+
+    public static int getFPlayerAmount() {
+        return FPlayerAmount;
     }
 }

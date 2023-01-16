@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class JedisTempStorage {
 
+    public static final List<String> MESSAGING_CHANNEL = new ArrayList<>();
     public static final List<String> Temp_INPUT_MAP = new ArrayList<>();
     public static final List<String> Temp_INTERCONNECT_MAP = new ArrayList<>();
     public static final List<String> Temp_INTERCONNECT2_MAP = new ArrayList<>();

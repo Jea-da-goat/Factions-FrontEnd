@@ -4,6 +4,7 @@ import com.itndev.factions.Config.Config;
 import com.itndev.factions.Jedis.JedisTempStorage;
 import com.itndev.factions.Main;
 import com.itndev.factions.Storage.Faction.FactionStorage;
+import com.itndev.factions.Utils.CommonUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -43,13 +44,13 @@ public class UserInfoStorage {
         if(Main.ServerName.equalsIgnoreCase("client1")) { //main.getInstance().clientname.equalsIgnoreCase("client1")
             if (!FactionStorage.PlayerFaction.containsKey(uuid)) {
                 //storage.teamrank.put(e.getPlayer().getUniqueId().toString(), "nomad");
-                JedisTempStorage.AddCommandToQueueFix_INNER("update:=:FactionRank:=:add:=:" + uuid + ":=:add:=:" + "nomad", "update:=:FactionRank:=:add:=:" + uuid + ":=:add:=:" + "nomad");
+                JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionRank:=:add:=:" + CommonUtils.String2Byte(uuid) + ":=:add:=:" + CommonUtils.String2Byte("nomad"));
             }
             if(FactionStorage.FactionRank.containsKey(uuid) && FactionStorage.FactionRank.get(uuid).equalsIgnoreCase(Config.Nomad)) {
                 if(FactionStorage.PlayerFaction.containsKey(uuid)) {
                     String teamname = FactionStorage.PlayerFaction.get(uuid);
-                    JedisTempStorage.AddCommandToQueueFix_INNER("update:=:PlayerFaction:=:remove:=:" + uuid + ":=:add:=:" + "nomad", "update:=:PlayerFaction:=:remove:=:" + uuid + ":=:add:=:" + "nomad");
-                    JedisTempStorage.AddCommandToQueueFix_INNER("update:=:FactionRank:=:add:=:" + uuid + ":=:add:=:" + "nomad", "update:=:FactionRank:=:add:=:" + uuid + ":=:add:=:" + "nomad");
+                    JedisTempStorage.AddCommandToQueue_INNER("update:=:PlayerFaction:=:remove:=:" + CommonUtils.String2Byte(uuid) + ":=:add:=:" + CommonUtils.String2Byte("nomad"));
+                    JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionRank:=:add:=:" + CommonUtils.String2Byte(uuid) + ":=:add:=:" + CommonUtils.String2Byte("nomad"));
                     //jedis.RedisUpdateQ.put("update:=:teammember:=:remove:=:" + uuid + ":=:add:=:" + "nomad", "update:=:teammember:=:remove:=:" + uuid + ":=:add:=:" + "nomad");
 
                 }
@@ -58,7 +59,7 @@ public class UserInfoStorage {
             if (uuidname.containsKey(uuid) /*e.getPlayer().hasPlayedBefore()*/) {
                 if (!FactionStorage.FactionRank.containsKey(uuid)) {
                     //storage.teamrank.put(e.getPlayer().getUniqueId().toString(), "nomad");
-                    JedisTempStorage.AddCommandToQueueFix_INNER("update:=:FactionRank:=:add:=:" + uuid + ":=:add:=:" + "nomad", "update:=:FactionRank:=:add:=:" + uuid + ":=:add:=:" + "nomad");
+                    JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionRank:=:add:=:" + CommonUtils.String2Byte(uuid) + ":=:add:=:" + CommonUtils.String2Byte("nomad"));
                 }
                 if (uuidname.containsKey(uuid)) {
                     String originname = uuidname.get(uuid);
@@ -66,40 +67,40 @@ public class UserInfoStorage {
 
 
                         //uuidname.put(e.getPlayer().getUniqueId().toString(), e.getPlayer().getName().toLowerCase(Locale.ROOT));
-                        JedisTempStorage.AddCommandToQueueFix_INNER("update:=:uuidname:=:add:=:" + uuid + ":=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT), "update:=:uuidname:=:add:=:" + uuid + ":=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT));
+                        JedisTempStorage.AddCommandToQueue_INNER("update:=:uuidname:=:add:=:" + CommonUtils.String2Byte(uuid) + ":=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)));
 
                         //nameuuid.put(e.getPlayer().getName().toLowerCase(Locale.ROOT), e.getPlayer().getUniqueId().toString());
-                        JedisTempStorage.AddCommandToQueueFix_INNER("update:=:nameuuid:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + uuid, "update:=:nameuuid:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + uuid);
+                        JedisTempStorage.AddCommandToQueue_INNER("update:=:nameuuid:=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(uuid));
 
                         //nameuuid.remove(originname);
-                        JedisTempStorage.AddCommandToQueueFix_INNER("update:=:nameuuid:=:remove:=:" + originname + ":=:add:=:" + "nomad", "update:=:nameuuid:=:remove:=:" + originname + ":=:add:=:" + "nomad");
+                        JedisTempStorage.AddCommandToQueue_INNER("update:=:nameuuid:=:remove:=:" + CommonUtils.String2Byte(originname) + ":=:add:=:" + CommonUtils.String2Byte("nomad"));
 
                         //namename.put(e.getPlayer().getName().toLowerCase(Locale.ROOT), e.getPlayer().getName());
-                        JedisTempStorage.AddCommandToQueueFix_INNER("update:=:namename:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + e.getPlayer().getName(), "update:=:namename:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + e.getPlayer().getName());
+                        JedisTempStorage.AddCommandToQueue_INNER("update:=:namename:=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)) + ":=:add:=:" + e.getPlayer().getName());
 
                     }
                 } else {
                     //uuidname.put(e.getPlayer().getUniqueId().toString(), e.getPlayer().getName().toLowerCase(Locale.ROOT));
-                    JedisTempStorage.AddCommandToQueueFix_INNER("update:=:uuidname:=:add:=:" + uuid + ":=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT), "update:=:uuidname:=:add:=:" + uuid + ":=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT));
+                    JedisTempStorage.AddCommandToQueue_INNER("update:=:uuidname:=:add:=:" + CommonUtils.String2Byte(uuid) + ":=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)));
 
                     //nameuuid.put(e.getPlayer().getName().toLowerCase(Locale.ROOT), e.getPlayer().getUniqueId().toString());
-                    JedisTempStorage.AddCommandToQueueFix_INNER("update:=:nameuuid:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + uuid, "update:=:nameuuid:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + uuid);
+                    JedisTempStorage.AddCommandToQueue_INNER("update:=:nameuuid:=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(uuid));
 
                     //namename.put(e.getPlayer().getName().toLowerCase(Locale.ROOT), e.getPlayer().getName());
-                    JedisTempStorage.AddCommandToQueueFix_INNER("update:=:namename:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + e.getPlayer().getName(), "update:=:namename:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + e.getPlayer().getName());
+                    JedisTempStorage.AddCommandToQueue_INNER("update:=:namename:=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName()));
                 }
             } else {
                 //storage.teamrank.put(e.getPlayer().getUniqueId().toString(), "nomad");
-                JedisTempStorage.AddCommandToQueueFix_INNER("update:=:FactionRank:=:add:=:" + uuid + ":=:add:=:" + "nomad", "update:=:FactionRank:=:add:=:" + uuid + ":=:add:=:" + "nomad");
+                JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionRank:=:add:=:" + CommonUtils.String2Byte(uuid) + ":=:add:=:" + CommonUtils.String2Byte("nomad"));
 
                 //uuidname.put(e.getPlayer().getUniqueId().toString(), e.getPlayer().getName().toLowerCase(Locale.ROOT));
-                JedisTempStorage.AddCommandToQueueFix_INNER("update:=:uuidname:=:add:=:" + uuid + ":=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT), "update:=:uuidname:=:add:=:" + uuid + ":=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT));
+                JedisTempStorage.AddCommandToQueue_INNER("update:=:uuidname:=:add:=:" + CommonUtils.String2Byte(uuid) + ":=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)));
 
                 //nameuuid.put(e.getPlayer().getName().toLowerCase(Locale.ROOT), e.getPlayer().getUniqueId().toString());
-                JedisTempStorage.AddCommandToQueueFix_INNER("update:=:nameuuid:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + uuid, "update:=:nameuuid:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + uuid);
+                JedisTempStorage.AddCommandToQueue_INNER("update:=:nameuuid:=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(uuid));
 
                 //namename.put(e.getPlayer().getName().toLowerCase(Locale.ROOT), e.getPlayer().getName());
-                JedisTempStorage.AddCommandToQueueFix_INNER("update:=:namename:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + e.getPlayer().getName(), "update:=:namename:=:add:=:" + e.getPlayer().getName().toLowerCase(Locale.ROOT) + ":=:add:=:" + e.getPlayer().getName());
+                JedisTempStorage.AddCommandToQueue_INNER("update:=:namename:=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName().toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(e.getPlayer().getName()));
             }
         }
     }

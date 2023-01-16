@@ -13,12 +13,12 @@ import java.util.concurrent.TimeoutException;
 public class CacheUtils {
 
     public static void UpdateCachedDTR(String FactionUUID, Double DTR) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:CachedDTR:=:add:=:" + FactionUUID + ":=:add:=:" + String.valueOf(DTR) + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:CachedDTR:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:add:=:" + CommonUtils.String2Byte(String.valueOf(DTR)) + ":=:" + Main.ServerName);
         CachedStorage.CachedDTR.put(FactionUUID, DTR);
     }
 
     public static void UpdateCachedBank(String FactionUUID, Double Bank) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:CachedBank:=:add:=:" + FactionUUID + ":=:add:=:" + String.valueOf(Bank) + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:CachedBank:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:add:=:" + CommonUtils.String2Byte(String.valueOf(Bank)) + ":=:" + Main.ServerName);
         CachedStorage.CachedBank.put(FactionUUID, Bank);
     }
 
@@ -28,12 +28,12 @@ public class CacheUtils {
     }
 
     public static void removeCachedDTR(String FactionUUID) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:CachedDTR:=:remove:=:" + FactionUUID + ":=:add:=:" + String.valueOf(0) + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:CachedDTR:=:remove:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:add:=:" + CommonUtils.String2Byte(String.valueOf(0)) + ":=:" + Main.ServerName);
         CachedStorage.CachedDTR.remove(FactionUUID);
     }
 
     public static void removeCachedBank(String FactionUUID) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:CachedBank:=:remove:=:" + FactionUUID + ":=:add:=:" + String.valueOf(0) + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:CachedBank:=:remove:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:add:=:" + CommonUtils.String2Byte(String.valueOf(0)) + ":=:" + Main.ServerName);
         CachedStorage.CachedBank.remove(FactionUUID);
     }
 

@@ -71,7 +71,7 @@ public class FactionBank {
 
                 if (!Take) {
                     //Main.econ.depositPlayer(Bukkit.getOfflinePlayer(java.util.UUID.fromString(UUID)), amount);
-                    Main.econ.withdrawPlayer(Bukkit.getOfflinePlayer(java.util.UUID.fromString(UUID)), amount);
+                    Main.econ.withdrawPlayer(Bukkit.getOfflinePlayer(java.util.UUID.fromString(UUID)), amount*-1);
                 }
                 BackendIO.SendCMD_BACKEND(UUID, args, df.format(bal));
             } else {

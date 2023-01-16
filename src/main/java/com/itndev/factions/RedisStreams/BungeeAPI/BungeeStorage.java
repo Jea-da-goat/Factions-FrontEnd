@@ -1,14 +1,13 @@
 package com.itndev.factions.RedisStreams.BungeeAPI;
 
 import com.itndev.factions.Jedis.JedisManager;
-import com.itndev.factions.Jedis.JedisTempStorage;
 import com.itndev.factions.Storage.UserInfoStorage;
 import com.itndev.factions.Utils.FactionUtils;
+import com.itndev.factions.Utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BungeeStorage {
@@ -75,6 +74,10 @@ public class BungeeStorage {
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-REFRESH")) {
                 UUID_TO_CONNECTEDSERVER.clear();
                 SERVER_TO_UUIDLIST.clear();
+            } else if(cmd_args[0].equalsIgnoreCase("PROXY-FAKEPLAYERS")) {
+                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
+                int amount = CommonUtils.toInt(TEMP[0]);
+                BungeeAPI.setFPlayerAmount(amount);
             }
         }
     }
@@ -85,18 +88,18 @@ public class BungeeStorage {
         if(UserInfoStorage.uuidname.containsKey(UUID)) {
             if(!UserInfoStorage.namename.get(UserInfoStorage.uuidname.get(UUID)).equals(Name)) {
                 String OriginalName = UserInfoStorage.uuidname.get(UUID);
-                JedisManager.updatehashmap("update:=:nameuuid:=:remove:=:" + OriginalName + ":=:add:=:" + UUID);
-                JedisManager.updatehashmap("update:=:namename:=:remove:=:" + OriginalName + ":=:add:=:" + Name);
-                JedisManager.updatehashmap("update:=:uuidname:=:remove:=:" + UUID + ":=:add:=:" + Name.toLowerCase(Locale.ROOT));
-                JedisManager.updatehashmap("update:=:uuidname:=:add:=:" + UUID + ":=:add:=:" + Name.toLowerCase(Locale.ROOT));
-                JedisManager.updatehashmap("update:=:nameuuid:=:add:=:" + Name.toLowerCase(Locale.ROOT) + ":=:add:=:" + UUID);
-                JedisManager.updatehashmap("update:=:namename:=:add:=:" + Name.toLowerCase(Locale.ROOT) + ":=:add:=:" + Name);
+                JedisManager.updatehashmap("update:=:nameuuid:=:remove:=:" + CommonUtils.String2Byte(OriginalName) + ":=:add:=:" + CommonUtils.String2Byte(UUID));
+                JedisManager.updatehashmap("update:=:namename:=:remove:=:" + CommonUtils.String2Byte(OriginalName) + ":=:add:=:" + CommonUtils.String2Byte(Name));
+                JedisManager.updatehashmap("update:=:uuidname:=:remove:=:" + CommonUtils.String2Byte(UUID) + ":=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)));
+                JedisManager.updatehashmap("update:=:uuidname:=:add:=:" + CommonUtils.String2Byte(UUID) + ":=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)));
+                JedisManager.updatehashmap("update:=:nameuuid:=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(UUID));
+                JedisManager.updatehashmap("update:=:namename:=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(Name));
                 OriginalName = null;
             }
         } else {
-            JedisManager.updatehashmap("update:=:uuidname:=:add:=:" + UUID + ":=:add:=:" + Name.toLowerCase(Locale.ROOT));
-            JedisManager.updatehashmap("update:=:nameuuid:=:add:=:" + Name.toLowerCase(Locale.ROOT) + ":=:add:=:" + UUID);
-            JedisManager.updatehashmap("update:=:namename:=:add:=:" + Name.toLowerCase(Locale.ROOT) + ":=:add:=:" + Name);
+            JedisManager.updatehashmap("update:=:uuidname:=:add:=:" + CommonUtils.String2Byte(UUID) + ":=:add:=:" + Name.toLowerCase(Locale.ROOT));
+            JedisManager.updatehashmap("update:=:nameuuid:=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(UUID));
+            JedisManager.updatehashmap("update:=:namename:=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(Name));
         }
         bulkcmd = null;
     }

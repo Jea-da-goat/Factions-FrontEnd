@@ -6,11 +6,8 @@ import com.itndev.factions.Main;
 import com.itndev.factions.SocketConnection.Socket;
 import com.itndev.factions.Storage.Faction.FactionStorage;
 import com.itndev.factions.Storage.TempStorage;
-import com.itndev.factions.Utils.BackendIO;
+import com.itndev.factions.Utils.*;
 import com.itndev.factions.Utils.DiscordAuth.DiscordAuth;
-import com.itndev.factions.Utils.FactionUtils;
-import com.itndev.factions.Utils.SystemUtils;
-import com.itndev.factions.Utils.UserInfoUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -207,9 +204,12 @@ public class PlayerListener implements Listener {
                                 //전쟁종료메세지
                                 //전쟁해제
                                 String Coords = "(월드:" + loc.getWorld().getName() + " X:" + loc.getX() + " Y:" + loc.getY() + " Z:" + loc.getZ() + ")";
-                                JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + UUID + ":=:" + "all" + ":=:" + "&a&o&l[ &r&f국가 &a&o&l] &r&c" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(FactionUtils.getPlayerFactionUUID(UUID))) + "&r의 " + UserInfoUtils.getPlayerUUIDOriginName(UUID) + " (이)가 국가 &7" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(TEMP_FactionUUID)) + "&r의 &c국가 신호기&r를 파괴했습니다:=:" + "true");
-                                JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + UUID + ":=:" + "all" + ":=:" + "&a&o&l[ &r&f국가 &a&o&l] &r&f국가 &c" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(FactionUtils.getPlayerFactionUUID(UUID))) + "&r (이)가 국가 &7" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(TEMP_FactionUUID)) + "&r와의 전쟁에서 승리했습니다:=:" + "true");
-                                JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + UUID + ":=:" + "all" + ":=:" + "&a&o&l[ &r&f국가 &a&o&l] &r&f국가 &c" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(TEMP_FactionUUID)) + "&r (이)의 영토는 앞으로 1시간 동안 점령이 불가능합니다.\n&r&7좌표:" + Coords + ":=:true");
+                                FactionUtils.SendFactionMessage(UUID, "all", "all", "&a&o&l[ &r&f국가 &a&o&l] &r&c" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(FactionUtils.getPlayerFactionUUID(UUID))) + "&r의 " + UserInfoUtils.getPlayerUUIDOriginName(UUID) + " (이)가 국가 &7" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(TEMP_FactionUUID)) + "&r의 &c국가 신호기&r를 파괴했습니다");
+                                FactionUtils.SendFactionMessage(UUID, "all", "all", "&a&o&l[ &r&f국가 &a&o&l] &r&f국가 &c" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(FactionUtils.getPlayerFactionUUID(UUID))) + "&r (이)가 국가 &7" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(TEMP_FactionUUID)) + "&r와의 전쟁에서 승리했습니다");
+                                FactionUtils.SendFactionMessage(UUID, "all", "all", "&a&o&l[ &r&f국가 &a&o&l] &r&f국가 &c" + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(TEMP_FactionUUID)) + "&r (이)의 영토는 앞으로 1시간 동안 점령이 불가능합니다.\n&r&7좌표:" + Coords);
+                                //JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + UUID + ":=:" + "all" + ":=:" + CommonUtils.String2Byte() + ":=:" + "true");
+                                //JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + UUID + ":=:" + "all" + ":=:" + CommonUtils.String2Byte() + ":=:" + "true");
+                                //JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + UUID + ":=:" + "all" + ":=:" + CommonUtils.String2Byte() + ":=:true");
                             } else {
                                 SystemUtils.sendfactionmessage(p, "&r&f오직 전쟁 상대 국가의 신호기만 파괴할수 있습니다");
                             }
@@ -260,9 +260,11 @@ public class PlayerListener implements Listener {
                                     @Override
                                     public void run() {
                                         FactionUtils.UnClaimOutPost(OutPostFactionUUID, Chunkkey);
-                                        JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + FactionUtils.getFactionLeader(OutPostFactionUUID) + ":=:" + "SIBAL" + ":=:" + "&r&f" + UserInfoUtils.getPlayerUUIDOriginName(UUID) + " 이가 당신의 전초기지 " + FactionOutPostName + " 의 신호기를 파괴했습니다" + ":=:" + "true");
+                                        FactionUtils.SendFactionMessage(FactionUtils.getFactionLeader(OutPostFactionUUID), "SIBAL", "SIBAL", "&r&f" + UserInfoUtils.getPlayerUUIDOriginName(UUID) + " 이가 당신의 전초기지 " + FactionOutPostName + " 의 신호기를 파괴했습니다");
+                                        //JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + FactionUtils.getFactionLeader(OutPostFactionUUID) + ":=:" + "SIBAL" + ":=:" + CommonUtils.String2Byte() + ":=:" + "true");
                                         if(FactionUtils.isInFaction(UUID)) {
-                                            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + FactionUtils.getFactionLeader(FactionUtils.getPlayerFactionUUID(UUID)) + ":=:" + "SIBAL" + ":=:" + "&r&f" + UserInfoUtils.getPlayerUUIDOriginName(UUID) + " 이가 " + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(OutPostFactionUUID)) + " 의 전초기지의 신호기를 파괴했습니다" + ":=:" + "true");
+                                            FactionUtils.SendFactionMessage(FactionUtils.getFactionLeader(FactionUtils.getPlayerFactionUUID(UUID)), "SIBAL", "SIBAL", "&r&f" + UserInfoUtils.getPlayerUUIDOriginName(UUID) + " 이가 " + FactionUtils.getCappedFactionName(FactionUtils.getFactionName(OutPostFactionUUID)) + " 의 전초기지의 신호기를 파괴했습니다");
+                                            //JedisTempStorage.AddCommandToQueue_INNER("notify:=:" +  + ":=:" + "SIBAL" + ":=:" + CommonUtils.String2Byte() + ":=:" + "true");
                                         }
                                         loc.getBlock().setType(Material.DIAMOND_BLOCK);
                                     }
@@ -393,6 +395,7 @@ public class PlayerListener implements Listener {
         TeleportInvisFix.onTeleport(e);
     }*/
 
+    @Deprecated
     @EventHandler(ignoreCancelled = true)
     public void onclick(InventoryClickEvent e) {
         if(e.getView().getTitle().contains(SystemUtils.colorize("&3&l[ &r&f국가 워프메뉴 &3&l]"))) {

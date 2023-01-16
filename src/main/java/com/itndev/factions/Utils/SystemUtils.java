@@ -215,12 +215,12 @@ public class SystemUtils {
     public static Boolean areachat = false;
 
     public static void PROCCED_INNER2_CHAT(String CMD, String clientname) {
-        String SPLITTER_INNER2 = "</SPLIT:=:1C4FD2F>";
+        String SPLITTER_INNER2 = " ";//"</SPLIT:=:1C4FD2F>";
         if(CMD.contains(SPLITTER_INNER2)) {
             String[] TEMP = CMD.split(SPLITTER_INNER2);
             if(TEMP.length == 2) {
-                String UUID = TEMP[0];
-                String Message = TEMP[1];
+                String UUID = CommonUtils.Byte2String(TEMP[0]);
+                String Message = CommonUtils.Byte2String(TEMP[1]);
                 Message = Message.stripLeading();
                 Message = Message.stripTrailing();
                 String finalMessage = Message;
@@ -257,7 +257,8 @@ public class SystemUtils {
                     finalmessage = finalmessage + temp + "&7";
                 }
                 if(FactionUtils.isInFaction(UUID)) {
-                    JedisTempStorage.AddCommandToQueue_INNER("chat" + ":=:" + p.getUniqueId().toString() + ":=:" + finalmessage);
+                    FactionUtils.SendFactionChat(p.getUniqueId().toString(), finalmessage);
+                    //JedisTempStorage.AddCommandToQueue_INNER("chat" + ":=:" + p.getUniqueId().toString() + ":=:" + finalmessage);
                 } else {
                     SystemUtils.sendmessage(p, "&c&l(!) &7소속된 팀이 없습니다");
                 }
@@ -268,7 +269,8 @@ public class SystemUtils {
                     finalmessage = finalmessage + temp + "&7";
                 }
                 if(FactionUtils.isInFaction(UUID)) {
-                    JedisTempStorage.AddCommandToQueue_INNER("chat" + ":=:" + p.getUniqueId().toString() + ":=:" + finalmessage);
+                    FactionUtils.SendFactionChat(p.getUniqueId().toString(), finalmessage);
+                    //JedisTempStorage.AddCommandToQueue_INNER("chat" + ":=:" + p.getUniqueId().toString() + ":=:" + finalmessage);
                 } else {
                     SystemUtils.sendmessage(p, "&c&l(!) &7소속된 팀이 없어서 팀 채팅에서 강제적으로 퇴장당했습니다");
                     FactionChatToggle.FactionChatToggled.remove(p);
@@ -330,27 +332,32 @@ public class SystemUtils {
                             translateHexColorCodes(colorize(finalmessage)) : (player.hasPermission("lpc.colorcodes") ? colorize(finalmessage) : (player.hasPermission("lpc.rgbcodes") ?
                             translateHexColorCodes(finalmessage) : finalmessage))).replace("%itndevfactions_formatfactionname%","" +  FactionUtils.getFormattedFaction2(UUID)).replace("%itndevfaction_formatrank%", FactionUtils.getFormattedRank2(UUID));
                     Dformat = PlaceHolderReplace(p, Dformat);
-                    String SPLITTER_INNER2 = "</SPLIT:=:1C4FD2F>";
-                    JedisTempStorage.AddCommandToQueue_INNER2(p.getUniqueId() + SPLITTER_INNER2 + Dformat);
+                    sendMainChat(p.getUniqueId().toString(), Dformat);
+                    //String SPLITTER_INNER2 = "</SPLIT:=:1C4FD2F>";
+                    //JedisTempStorage.AddCommandToQueue_INNER2(p.getUniqueId() + SPLITTER_INNER2 + Dformat);
                 }
 
             }
         }).start();
     }
 
-    private static String list_splitter = "<%&LISTSPLITTER&%>";
+    public static void sendMainChat(String UUID, String Dformat) {
+        JedisTempStorage.AddCommandToQueue_INNER2(CommonUtils.String2Byte(UUID) + " " + CommonUtils.String2Byte(Dformat));
+    }
+
+    //private static String list_splitter = "<%&LISTSPLITTER&%>";
 
     public static ArrayList string2list(String k) {
-        if(k.contains("<%&LISTSPLITTER&%>")) {
-            String[] parts = k.split("<%&LISTSPLITTER&%>");
+        if(k.contains(" ")) {
+            String[] parts = k.split(" ");
             ArrayList<String> memlist = new ArrayList<>();
             for(String d : parts) {
-                memlist.add(d);
+                memlist.add(CommonUtils.Byte2String(d));
             }
             return memlist;
         } else {
             ArrayList<String> memlist = new ArrayList<>();
-            memlist.add(k);
+            memlist.add(CommonUtils.Byte2String(k));
             return memlist;
         }
     }
@@ -360,9 +367,9 @@ public class SystemUtils {
         for(String c : list) {
             i = i + 1;
             if(list.size() > i) {
-                k = k + c + "<%&LISTSPLITTER&%>";
+                k = k + CommonUtils.String2Byte(c) + " ";
             } else {
-                k = k + c;
+                k = k + CommonUtils.String2Byte(c);
             }
 
 

@@ -298,39 +298,45 @@ public class FactionUtils {
 
     }
 
+
+
     public static void SendFactionMessage(String playeruuid, String targetuuid, String type, String message) {
         if(type.equalsIgnoreCase("single")) {
             //type : SIBAL, TeamChat, all
-            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + playeruuid + ":=:" + targetuuid + ":=:" + message + ":=:" + "false");
+            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + CommonUtils.String2Byte(playeruuid) + ":=:" + CommonUtils.String2Byte(targetuuid) + ":=:" + CommonUtils.String2Byte(message) + ":=:" + "false");
         } else {
-            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + playeruuid + ":=:" + type + ":=:" + message + ":=:" + "true");
+            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + CommonUtils.String2Byte(playeruuid) + ":=:" + CommonUtils.String2Byte(type) + ":=:" + CommonUtils.String2Byte(message) + ":=:" + "true");
         }
     }
 
     public static void SendFactionMessage_GETRAWCMD(String playeruuid, String targetuuid, String type, String message) {
         if(type.equalsIgnoreCase("single")) {
             //type : SIBAL, TeamChat, all
-            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + playeruuid + ":=:" + targetuuid + ":=:" + message + ":=:" + "false");
+            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + CommonUtils.String2Byte(playeruuid) + ":=:" + CommonUtils.String2Byte(targetuuid) + ":=:" + CommonUtils.String2Byte(message) + ":=:" + "false");
         } else {
-            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + playeruuid + ":=:" + type + ":=:" + message + ":=:" + "true");
+            JedisTempStorage.AddCommandToQueue_INNER("notify:=:" + CommonUtils.String2Byte(playeruuid) + ":=:" + CommonUtils.String2Byte(type) + ":=:" + CommonUtils.String2Byte(message) + ":=:" + "true");
         }
+    }
+
+    public static void SendFactionChat(String senderUUID, String finalmessage) {
+        JedisTempStorage.AddCommandToQueue_INNER("chat" + ":=:" + CommonUtils.String2Byte(senderUUID) + ":=:" + CommonUtils.String2Byte(finalmessage));
     }
 
     public static void ClaimLand(String FactionUUID, String Chunkkey) {
         FactionStorage.LandToFaction.put(Chunkkey, FactionUUID);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:LandToFaction:=:add:=:" + Chunkkey + ":=:add:=:" + FactionUUID + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:LandToFaction:=:add:=:" + CommonUtils.String2Byte(Chunkkey) + ":=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:" + Main.ServerName);
         ArrayList<String> updatelist = new ArrayList<>();
         if(FactionStorage.FactionToLand.containsKey(FactionUUID)) {
             updatelist = FactionStorage.FactionToLand.get(FactionUUID);
         }
         updatelist.add(Chunkkey);
         FactionStorage.FactionToLand.put(FactionUUID, updatelist);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionToLand:=:add:=:" + FactionUUID + ":=:add:=:" + Chunkkey + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionToLand:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:add:=:" + CommonUtils.String2Byte(Chunkkey) + ":=:" + Main.ServerName);
     }
 
     public static void UnClaimLand(String FactionUUID, String Chunkkey) {
         FactionStorage.LandToFaction.remove(Chunkkey);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:LandToFaction:=:remove:=:" + Chunkkey + ":=:remove:=:" + FactionUUID + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:LandToFaction:=:remove:=:" + CommonUtils.String2Byte(Chunkkey) + ":=:remove:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:" + Main.ServerName);
         ArrayList<String> updatelist = FactionStorage.FactionToLand.get(FactionUUID);
         updatelist.remove(Chunkkey);
         if(updatelist.isEmpty()) {
@@ -339,24 +345,24 @@ public class FactionUtils {
             FactionStorage.FactionToLand.put(FactionUUID, updatelist);
         }
 
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionToLand:=:add:=:" + FactionUUID + ":=:remove:=:" + Chunkkey + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionToLand:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:remove:=:" + CommonUtils.String2Byte(Chunkkey) + ":=:" + Main.ServerName);
     }
 
     public static void ClaimOutPost(String FactionUUID, String Chunkkey) {
         FactionStorage.OutPostToFaction.put(Chunkkey, FactionUUID);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:OutPostToFaction:=:add:=:" + Chunkkey + ":=:add:=:" + FactionUUID + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:OutPostToFaction:=:add:=:" + CommonUtils.String2Byte(Chunkkey) + ":=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:" + Main.ServerName);
         ArrayList<String> updatelist = new ArrayList<>();
         if(FactionStorage.FactionToOutPost.containsKey(FactionUUID)) {
             updatelist = FactionStorage.FactionToOutPost.get(FactionUUID);
         }
         updatelist.add(Chunkkey);
         FactionStorage.FactionToOutPost.put(FactionUUID, updatelist);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionToOutPost:=:add:=:" + FactionUUID + ":=:add:=:" + Chunkkey + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionToOutPost:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:add:=:" + CommonUtils.String2Byte(Chunkkey) + ":=:" + Main.ServerName);
     }
 
     public static void UnClaimOutPost(String FactionUUID, String Chunkkey) {
         FactionStorage.OutPostToFaction.remove(Chunkkey);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:OutPostToFaction:=:remove:=:" + Chunkkey + ":=:remove:=:" + FactionUUID + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:OutPostToFaction:=:remove:=:" + CommonUtils.String2Byte(Chunkkey) + ":=:remove:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:" + Main.ServerName);
         ArrayList<String> updatelist = FactionStorage.FactionToOutPost.get(FactionUUID);
         updatelist.remove(Chunkkey);
         if(updatelist.isEmpty()) {
@@ -364,7 +370,7 @@ public class FactionUtils {
         } else {
             FactionStorage.FactionToOutPost.put(FactionUUID, updatelist);
         }
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionToOutPost:=:add:=:" + FactionUUID + ":=:remove:=:" + Chunkkey + ":=:" + Main.ServerName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionToOutPost:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:remove:=:" + CommonUtils.String2Byte(Chunkkey) + ":=:" + Main.ServerName);
     }
 
     public static Boolean isOutPost(Location loc) {
@@ -742,7 +748,7 @@ public class FactionUtils {
     }
 
     public static void SetFactionSpawn(String FactionUUID, String ConvertLoc) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + FactionUUID + "=spawn" + ":=:add:=:" + Main.ServerName + "===" + ConvertLoc);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=spawn") + ":=:add:=:" + CommonUtils.String2Byte(Main.ServerName + "===" + ConvertLoc));
         RegisterFactionInfo(FactionUUID, "spawn");
     }
 
@@ -757,19 +763,19 @@ public class FactionUtils {
     public static void ClearFactionInfo(String FactionUUID) {
         if(FactionStorage.FactionInfo.containsKey(FactionUUID)) {
             for (String key : FactionStorage.FactionInfoList.get(FactionUUID)) {
-                JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:remove:=:" + FactionUUID + "=" + key + ":=:remove:=:");
+                JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:remove:=:" + CommonUtils.String2Byte(FactionUUID + "=" + key) + ":=:remove:=:" + CommonUtils.String2Byte(FactionUUID));
             }
-            JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfoList:=:remove:=:" + FactionUUID + ":=:remove:=:");
+            JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfoList:=:remove:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:remove:=:" + CommonUtils.String2Byte(FactionUUID));
         }
     }
 
     public static void RemoveFactionSpawn(String FactionUUID) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:remove:=:" + FactionUUID + "=spawn" + ":=:add:=:" + Main.ServerName);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfoList:=:add:=:" + FactionUUID + "" + ":=:remove:=:" + "spawn");
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:remove:=:" + CommonUtils.String2Byte(FactionUUID + "=spawn") + ":=:add:=:" + CommonUtils.String2Byte(Main.ServerName));
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfoList:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:remove:=:" + CommonUtils.String2Byte("spawn"));
     }
 
     public static void SetFactionNotice(String FactionUUID, String factionnotice) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + FactionUUID + "=notice" + ":=:add:=:" + factionnotice);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=notice") + ":=:add:=:" + CommonUtils.String2Byte(factionnotice));
         RegisterFactionInfo(FactionUUID, "notice");
     }
 
@@ -812,28 +818,28 @@ public class FactionUtils {
 
     public static void SetBeaconLocation(String FactionUUID, String OutPostName, Location BeaconLocation) {
         String location = SystemUtils.loc2string(BeaconLocation);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + FactionUUID + "=beacon=" + OutPostName + ":=:add:=:" + location);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=beacon=" + OutPostName) + ":=:add:=:" + CommonUtils.String2Byte(location));
     }
 
     public static void SetFactionOutPostWarpLocation(String FactionUUID, String Chunkkey, Location loc, String OutPostName) {
         String location = SystemUtils.loc2string(loc);
         SetFactionOutPostName(FactionUUID, Chunkkey, OutPostName);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + FactionUUID + "=warplocation=" + OutPostName + ":=:add:=:" + Main.ServerName + "===" + location);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=warplocation=" + OutPostName) + ":=:add:=:" + CommonUtils.String2Byte(Main.ServerName + "===" + location));
     }
 
     public static void SetFactionOutPostName(String FactionUUID, String Chunkkey, String OutPostName) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + FactionUUID + "=outpost=" + Chunkkey + ":=:add:=:" + OutPostName);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionOutPost:=:add:=:" + FactionUUID + "=" + OutPostName + ":=:add:=:" + Chunkkey);
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionOutPostList:=:add:=:" + FactionUUID + ":=:add:=:" + OutPostName);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=outpost=" + Chunkkey) + ":=:add:=:" + CommonUtils.String2Byte(OutPostName));
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionOutPost:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=" + OutPostName) + ":=:add:=:" + CommonUtils.String2Byte(Chunkkey));
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionOutPostList:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:add:=:" + CommonUtils.String2Byte(OutPostName));
         RegisterFactionInfo(FactionUUID, Chunkkey);
     }
 
     public static void RemoveFactionNotice(String FactionUUID) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:remove:=:" + FactionUUID + "=notice" + ":=:add:=:" + "D");
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:remove:=:" + CommonUtils.String2Byte(FactionUUID + "=notice") + ":=:add:=:" + CommonUtils.String2Byte("D"));
     }
 
     public static void SetFactionDesc(String FactionUUID, String factionDesc) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + FactionUUID + "=desc" + ":=:add:=:" + factionDesc);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=desc") + ":=:add:=:" + CommonUtils.String2Byte(factionDesc));
         RegisterFactionInfo(FactionUUID, "desc");
     }
 
@@ -850,19 +856,19 @@ public class FactionUtils {
     }
 
     public static void RemoveFactionDesc(String FactionUUID) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:remove:=:" + FactionUUID + "=desc" + ":=:add:=:" + "D");
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:remove:=:" + CommonUtils.String2Byte(FactionUUID + "=desc") + ":=:add:=:" + CommonUtils.String2Byte("D"));
     }
 
     public static void WarpLocation(String UUID, String ServerName, String Location, Boolean isExpire) {
         if(!isExpire) {
-            JedisTempStorage.AddCommandToQueue_INNER("warplocation:=:" + UUID + ":=:" + ServerName + ":=:" + Location + ":=:notexpired");
+            JedisTempStorage.AddCommandToQueue_INNER("warplocation:=:" + CommonUtils.String2Byte(UUID) + ":=:" + CommonUtils.String2Byte(ServerName) + ":=:" + CommonUtils.String2Byte(Location) + ":=:" + CommonUtils.String2Byte("notexpired"));
         } else {
-            JedisTempStorage.AddCommandToQueue_INNER("warplocation:=:" + UUID + ":=:" + ServerName + ":=:" + Location + ":=:expired");
+            JedisTempStorage.AddCommandToQueue_INNER("warplocation:=:" + CommonUtils.String2Byte(UUID) + ":=:" + CommonUtils.String2Byte(ServerName) + ":=:" + CommonUtils.String2Byte(Location) + ":=:" + CommonUtils.String2Byte("expired"));
         }
     }
 
     public static void RegisterFactionInfo(String FactionUUID, String type) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfoList:=:add:=:" + FactionUUID + ":=:add:=:" + type);
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfoList:=:add:=:" + CommonUtils.String2Byte(FactionUUID) + ":=:add:=:" + CommonUtils.String2Byte(type));
     }
 
     public static Boolean isInWar(String FactionUUID) {
@@ -898,8 +904,8 @@ public class FactionUtils {
     }
 
     public static void setMainBeaconStringLocation(String FactionUUID, Location loc) {
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + FactionUUID + "=mainbeacon:=:add:=:" + Main.ServerName + "===" + SystemUtils.loc2string(loc));
-        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + FactionUUID + "=mainbeaconchunk:=:add:=:" + getChunkKey(loc));
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=mainbeacon") + ":=:add:=:" + CommonUtils.String2Byte(Main.ServerName + "===" + SystemUtils.loc2string(loc)));
+        JedisTempStorage.AddCommandToQueue_INNER("update:=:FactionInfo:=:add:=:" + CommonUtils.String2Byte(FactionUUID + "=mainbeaconchunk") + ":=:add:=:" + CommonUtils.String2Byte(getChunkKey(loc)));
         RegisterFactionInfo(FactionUUID, "mainbeacon");
         RegisterFactionInfo(FactionUUID, "mainbeaconchunk");
     }

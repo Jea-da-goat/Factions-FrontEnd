@@ -70,15 +70,15 @@ public class YamlDump {
 
     public static void TryDumpHashMaps_Factions_LISTTYPE() {
         ConcurrentHashMap<String, ArrayList<String>> TEMP_FactionInfoList = FactionStorage.FactionInfoList;
-        DumpYaml(RedisDump.ConcurrentListMapConvert(TEMP_FactionInfoList), "FactionInfoList");
+        DumpYaml(RedisDump.ConcurrentListMapConvert(TEMP_FactionInfoList), "dumpyaml" + System.getProperty("file.separator") + "FactionInfoList");
         ConcurrentHashMap<String, ArrayList<String>> TEMP_FactionOutPostList = FactionStorage.FactionOutPostList;
-        DumpYaml(RedisDump.ConcurrentListMapConvert(TEMP_FactionOutPostList), "FactionOutPostList");
+        DumpYaml(RedisDump.ConcurrentListMapConvert(TEMP_FactionOutPostList), "dumpyaml" + System.getProperty("file.separator") + "FactionOutPostList");
         ConcurrentHashMap<String, ArrayList<String>> TEMP_FactionMember = FactionStorage.FactionMember;
-        DumpYaml(RedisDump.ConcurrentListMapConvert(TEMP_FactionMember), "FactionMember");
+        DumpYaml(RedisDump.ConcurrentListMapConvert(TEMP_FactionMember), "dumpyaml" + System.getProperty("file.separator") + "FactionMember");
         HashMap<String, ArrayList<String>> TEMP_FactionToLand = FactionStorage.FactionToLand;
-        DumpYaml(RedisDump.ListMapConvert(TEMP_FactionToLand), "FactionToLand");
+        DumpYaml(RedisDump.ListMapConvert(TEMP_FactionToLand), "dumpyaml" + System.getProperty("file.separator") + "FactionToLand");
         HashMap<String, ArrayList<String>> TEMP_FactionToOutPost = FactionStorage.FactionToOutPost;
-        DumpYaml(RedisDump.ListMapConvert(TEMP_FactionToOutPost), "FactionToOutPost");
+        DumpYaml(RedisDump.ListMapConvert(TEMP_FactionToOutPost), "dumpyaml" + System.getProperty("file.separator") + "FactionToOutPost");
     }
 
     public static void TryLoadHashMaps_Factions_LISTTYPE() {
@@ -110,28 +110,28 @@ public class YamlDump {
 
     public static void TryDumpHashMaps_Factions() {
         ConcurrentHashMap<String, String> TEMP_FactionInfo = FactionStorage.FactionInfo;
-        DumpYaml(RedisDump.FixMap1(TEMP_FactionInfo), "FactionInfo");
+        DumpYaml(RedisDump.FixMap1(TEMP_FactionInfo), "dumpyaml" + System.getProperty("file.separator") + "FactionInfo");
 
         ConcurrentHashMap<String, String> TEMP_FactionNameToFactionName = FactionStorage.FactionNameToFactionName;
-        DumpYaml(RedisDump.FixMap1(TEMP_FactionNameToFactionName), "FactionNameToFactionName");
+        DumpYaml(RedisDump.FixMap1(TEMP_FactionNameToFactionName), "dumpyaml" + System.getProperty("file.separator") + "FactionNameToFactionName");
 
         ConcurrentHashMap<String, String> TEMP_FactionRank = FactionStorage.FactionRank;
-        DumpYaml(RedisDump.FixMap1(TEMP_FactionRank), "FactionRank");
+        DumpYaml(RedisDump.FixMap1(TEMP_FactionRank), "dumpyaml" + System.getProperty("file.separator") + "FactionRank");
 
         HashMap<String, String> TEMP_FactionNameToFactionUUID = FactionStorage.FactionNameToFactionUUID;
-        DumpYaml(TEMP_FactionNameToFactionUUID, "FactionNameToFactionUUID");
+        DumpYaml(TEMP_FactionNameToFactionUUID, "dumpyaml" + System.getProperty("file.separator") + "FactionNameToFactionUUID");
 
         HashMap<String, String> TEMP_FactionUUIDToFactionName = FactionStorage.FactionUUIDToFactionName;
-        DumpYaml(TEMP_FactionUUIDToFactionName, "FactionUUIDToFactionName");
+        DumpYaml(TEMP_FactionUUIDToFactionName, "dumpyaml" + System.getProperty("file.separator") + "FactionUUIDToFactionName");
 
         ConcurrentHashMap<String, String> TEMP_FactionOutPost = FactionStorage.FactionOutPost;
-        DumpYaml(RedisDump.FixMap1(TEMP_FactionOutPost), "FactionOutPost");
+        DumpYaml(RedisDump.FixMap1(TEMP_FactionOutPost), "dumpyaml" + System.getProperty("file.separator") + "FactionOutPost");
 
         ConcurrentHashMap<String, String> TEMP_FactionWarpLocations = FactionStorage.FactionWarpLocations;
-        DumpYaml(RedisDump.FixMap1(TEMP_FactionWarpLocations), "FactionWarpLocations");
+        DumpYaml(RedisDump.FixMap1(TEMP_FactionWarpLocations), "dumpyaml" + System.getProperty("file.separator") + "FactionWarpLocations");
 
         HashMap<String, String> TEMP_PlayerFaction = FactionStorage.PlayerFaction;
-        DumpYaml(TEMP_PlayerFaction, "PlayerFaction");
+        DumpYaml(TEMP_PlayerFaction, "dumpyaml" + System.getProperty("file.separator") + "PlayerFaction");
 
 
 
@@ -195,13 +195,13 @@ public class YamlDump {
 
     public static void TryDumpHashMaps_UUIDINFO() {
         ConcurrentHashMap<String, String> TEMP_namename = UserInfoStorage.namename;
-        DumpYaml(RedisDump.FixMap1(TEMP_namename), "namename");
+        DumpYaml(RedisDump.FixMap1(TEMP_namename), "dumpyaml" + System.getProperty("file.separator") + "namename");
 
         ConcurrentHashMap<String, String> TEMP_nameuuid = UserInfoStorage.nameuuid;
-        DumpYaml(RedisDump.FixMap1(TEMP_nameuuid), "nameuuid");
+        DumpYaml(RedisDump.FixMap1(TEMP_nameuuid), "dumpyaml" + System.getProperty("file.separator") + "nameuuid");
 
         ConcurrentHashMap<String, String> TEMP_uuidname = UserInfoStorage.uuidname;
-        DumpYaml(RedisDump.FixMap1(TEMP_uuidname), "uuidname");
+        DumpYaml(RedisDump.FixMap1(TEMP_uuidname), "dumpyaml" + System.getProperty("file.separator") + "uuidname");
     }
 
     public static void TryLoadHashMaps_UUIDINFO() {
