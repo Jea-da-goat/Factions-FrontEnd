@@ -33,9 +33,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMove(PlayerMoveEvent e) {
         String UUID = e.getPlayer().getUniqueId().toString();
-        if(!DiscordAuth.isAuth(UUID)) {
+        /*if(!DiscordAuth.isAuth(UUID)) {
             e.setCancelled(true);
-        }
+        }*/
         new Thread( () -> {
             Location from = e.getFrom();
             Location to = e.getTo();
@@ -51,7 +51,7 @@ public class PlayerListener implements Listener {
             }
         }).start();
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    /*@EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent e) {
         String UUID = e.getPlayer().getUniqueId().toString();
         if(!DiscordAuth.isAuth(UUID)) {
@@ -62,7 +62,7 @@ public class PlayerListener implements Listener {
             }
 
         }
-    }
+    }*/
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onExplosion(EntityExplodeEvent e) {
@@ -289,7 +289,7 @@ public class PlayerListener implements Listener {
 
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    /*@EventHandler(priority = EventPriority.HIGHEST)
     public void onDamage(EntityDamageByEntityEvent e) {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
@@ -297,7 +297,7 @@ public class PlayerListener implements Listener {
                 e.setCancelled(true);
             }
         }
-    }
+    }*/
 
     @EventHandler(ignoreCancelled = true)
     public void onPVP(EntityDamageByEntityEvent e) {
@@ -320,12 +320,12 @@ public class PlayerListener implements Listener {
         //UserInfoStorage.onPlayerJoinEvent(e);
         Player p = e.getPlayer();
         String uuid = p.getUniqueId().toString();
-        if(!DiscordAuth.isAuth(uuid)) {
+        /*if(!DiscordAuth.isAuth(uuid)) {
             DiscordAuth.FetchAuthInfo(p, uuid);
         }
         if(p.hasPermission("faxcore.bypass.discordauth")) {
             DiscordAuth.DISCORD_AUTH_INFO.put(uuid, "ADMIN_BYPASS");
-        }
+        }*/
         if(onJoinWarp.containsKey(uuid)) {
             p.teleportAsync(onJoinWarp.get(uuid));
             onJoinWarp.remove(uuid);
@@ -333,7 +333,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    /*@EventHandler(priority = EventPriority.HIGHEST)
     public void onOpenInv(InventoryOpenEvent e) {
         String UUID = e.getPlayer().getUniqueId().toString();
         if(!DiscordAuth.isAuth(UUID)) {
@@ -349,7 +349,7 @@ public class PlayerListener implements Listener {
                 e.setCancelled(true);
             }
         }
-    }
+    }*/
 
 
     @Deprecated
