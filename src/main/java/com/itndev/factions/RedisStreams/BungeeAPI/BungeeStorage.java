@@ -50,7 +50,7 @@ public class BungeeStorage {
                 String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(" ");
                 String UUID = CommonUtils.Byte2String(TEMP[0]);
                 String NAME = CommonUtils.Byte2String(TEMP[1]);
-                UPDATE_USERINFO(UUID, NAME);
+                //UPDATE_USERINFO(UUID, NAME);
                 FactionUtils.FactionNotify(UUID, "TeamChat", "&r&7" + FactionUtils.getPlayerLangRank(UUID) + " &c" + NAME + "&f 님이 서버에 접속했습니다", "true");
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-LEAVE")) {
                 String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(" ");
@@ -64,7 +64,7 @@ public class BungeeStorage {
                 String NAME = CommonUtils.Byte2String(TEMP[1]);
                 String ServerName = CommonUtils.Byte2String(TEMP[2]);
                 addPlayer(UUID, ServerName);
-                UPDATE_USERINFO(UUID, NAME);
+                //UPDATE_USERINFO(UUID, NAME);
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-CONNECTSERVER")) {
                 String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(" ");
                 String UUID = CommonUtils.Byte2String(TEMP[0]);
@@ -82,7 +82,7 @@ public class BungeeStorage {
         }
     }
 
-    public static void UPDATE_USERINFO(String UUID, String Name) {
+    /*public static void UPDATE_USERINFO(String UUID, String Name) {
         //SystemUtils.logger("Player NAME:" + Name + ", UUID:" + UUID + " has connected to server");
         List<String> bulkcmd = new ArrayList<>();
         if(UserInfoStorage.uuidname.containsKey(UUID)) {
@@ -97,10 +97,10 @@ public class BungeeStorage {
                 OriginalName = null;
             }
         } else {
-            JedisManager.updatehashmap("update:=:uuidname:=:add:=:" + CommonUtils.String2Byte(UUID) + ":=:add:=:" + Name.toLowerCase(Locale.ROOT));
+            JedisManager.updatehashmap("update:=:uuidname:=:add:=:" + CommonUtils.String2Byte(UUID) + ":=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)));
             JedisManager.updatehashmap("update:=:nameuuid:=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(UUID));
             JedisManager.updatehashmap("update:=:namename:=:add:=:" + CommonUtils.String2Byte(Name.toLowerCase(Locale.ROOT)) + ":=:add:=:" + CommonUtils.String2Byte(Name));
         }
         bulkcmd = null;
-    }
+    }*/
 }

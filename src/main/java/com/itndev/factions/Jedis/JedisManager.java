@@ -216,10 +216,10 @@ public class JedisManager {
         if(c > 600) {
             String[] args = k.split(":=:");
             if(args[0].equalsIgnoreCase("update")) {
-                if(args.length > 6) {
+                if(args.length >= 6) {
                     args[3] = CommonUtils.Byte2String(args[3]);
                     args[5] = CommonUtils.Byte2String(args[5]);
-                } else if(args.length > 4) {
+                } else if(args.length >= 4) {
                     args[3] = CommonUtils.Byte2String(args[3]);
                 }
                 if(args[1].equalsIgnoreCase("FactionToLand")

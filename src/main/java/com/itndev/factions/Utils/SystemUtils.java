@@ -216,6 +216,7 @@ public class SystemUtils {
 
     public static void PROCCED_INNER2_CHAT(String CMD, String clientname) {
         String SPLITTER_INNER2 = " ";//"</SPLIT:=:1C4FD2F>";
+        System.out.println(CMD);
         if(CMD.contains(SPLITTER_INNER2)) {
             String[] TEMP = CMD.split(SPLITTER_INNER2);
             if(TEMP.length == 2) {
@@ -342,6 +343,7 @@ public class SystemUtils {
     }
 
     public static void sendMainChat(String UUID, String Dformat) {
+        System.out.println(CommonUtils.String2Byte(UUID) + " " + CommonUtils.String2Byte(Dformat));
         JedisTempStorage.AddCommandToQueue_INNER2(CommonUtils.String2Byte(UUID) + " " + CommonUtils.String2Byte(Dformat));
     }
 

@@ -99,9 +99,9 @@ public class PlayerListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent e) {
         String UUID = e.getPlayer().getUniqueId().toString();
-        if(!DiscordAuth.isAuth(UUID)) {
+        /*if(!DiscordAuth.isAuth(UUID)) {
             e.setCancelled(true);
-        }
+        }*/
         Player p = e.getPlayer();
         if(!p.getGameMode().equals(GameMode.CREATIVE)) {
             Location loc = e.getBlock().getLocation();
@@ -155,9 +155,9 @@ public class PlayerListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBreak(BlockBreakEvent e) {
         String UUID = e.getPlayer().getUniqueId().toString();
-        if(!DiscordAuth.isAuth(UUID)) {
+        /*if(!DiscordAuth.isAuth(UUID)) {
             e.setCancelled(true);
-        }
+        }*/
         Player p = e.getPlayer();
         if(!p.getGameMode().equals(GameMode.CREATIVE)) {
             Location loc = e.getBlock().getLocation();
@@ -356,10 +356,10 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent e) {
         String UUID = e.getPlayer().getUniqueId().toString();
-        if(!DiscordAuth.isAuth(UUID)) {
+        /*if(!DiscordAuth.isAuth(UUID)) {
             e.setCancelled(true);
             return;
-        }
+        }*/
         String k = e.getMessage();
         Player p = e.getPlayer();
         /*ItemStack item = p.getInventory().getItemInMainHand();

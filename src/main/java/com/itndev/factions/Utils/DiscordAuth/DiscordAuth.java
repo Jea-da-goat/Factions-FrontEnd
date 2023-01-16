@@ -38,7 +38,7 @@ public class DiscordAuth {
     }
 
     public static Boolean isAuth(String UUID) {
-        return DISCORD_AUTH_INFO.containsKey(UUID);
+        return true;//!Functions.DISCORD_AUTH_ENABLE || DISCORD_AUTH_INFO.containsKey(UUID);
     }
 
     public static void FetchAuthInfo(Player p, String UUID) {
