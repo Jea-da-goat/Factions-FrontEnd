@@ -47,36 +47,36 @@ public class BungeeStorage {
         if(command.contains(":=:")) {
             String[] cmd_args = command.split(":=:");
             if(cmd_args[0].equalsIgnoreCase("PROXY-JOIN")) {
-                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
-                String UUID = TEMP[0];
-                String NAME = TEMP[1];
+                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(" ");
+                String UUID = CommonUtils.Byte2String(TEMP[0]);
+                String NAME = CommonUtils.Byte2String(TEMP[1]);
                 UPDATE_USERINFO(UUID, NAME);
                 FactionUtils.FactionNotify(UUID, "TeamChat", "&r&7" + FactionUtils.getPlayerLangRank(UUID) + " &c" + NAME + "&f 님이 서버에 접속했습니다", "true");
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-LEAVE")) {
-                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
-                String UUID = TEMP[0];
-                String NAME = TEMP[1];
+                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(" ");
+                String UUID = CommonUtils.Byte2String(TEMP[0]);
+                String NAME = CommonUtils.Byte2String(TEMP[1]);
                 FactionUtils.FactionNotify(UUID, "TeamChat", "&r&7" + FactionUtils.getPlayerLangRank(UUID) + " &c" + NAME + "&f 님이 서버에서 나갔습니다", "true");
                 removePlayer(UUID);
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-PLAYERINFO")) {
-                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
-                String UUID = TEMP[0];
-                String NAME = TEMP[1];
-                String ServerName = TEMP[2];
+                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(" ");
+                String UUID = CommonUtils.Byte2String(TEMP[0]);
+                String NAME = CommonUtils.Byte2String(TEMP[1]);
+                String ServerName = CommonUtils.Byte2String(TEMP[2]);
                 addPlayer(UUID, ServerName);
                 UPDATE_USERINFO(UUID, NAME);
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-CONNECTSERVER")) {
-                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
-                String UUID = TEMP[0];
-                String NAME = TEMP[1];
-                String ServerName = TEMP[2];
+                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(" ");
+                String UUID = CommonUtils.Byte2String(TEMP[0]);
+                String NAME = CommonUtils.Byte2String(TEMP[1]);
+                String ServerName = CommonUtils.Byte2String(TEMP[2]);
                 addPlayer(UUID, ServerName);
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-REFRESH")) {
                 UUID_TO_CONNECTEDSERVER.clear();
                 SERVER_TO_UUIDLIST.clear();
             } else if(cmd_args[0].equalsIgnoreCase("PROXY-FAKEPLAYERS")) {
-                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(",");
-                int amount = CommonUtils.toInt(TEMP[0]);
+                String[] TEMP = cmd_args[1].replace("{", "").replace("}", "").split(" ");
+                int amount = CommonUtils.toInt(CommonUtils.Byte2String(TEMP[0]));
                 BungeeAPI.setFPlayerAmount(amount);
             }
         }

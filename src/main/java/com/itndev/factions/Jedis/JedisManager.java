@@ -310,8 +310,8 @@ public class JedisManager {
                 }
             } else if(args[0].equalsIgnoreCase("eco")) {
                 String giveortake = args[1];
-                String targetuuid = args[2];
-                String Amount = args[3];
+                String targetuuid = CommonUtils.Byte2String(args[2]);
+                String Amount = CommonUtils.Byte2String(args[3]);
                 if(Bukkit.getOfflinePlayer(UUID.fromString(targetuuid)).isOnline()) {
                     OfflinePlayer op = Bukkit.getOfflinePlayer(UUID.fromString(targetuuid));
                     Double AmountDouble = Double.parseDouble(Amount);
@@ -325,10 +325,10 @@ public class JedisManager {
                 }
             } else if(args[0].equalsIgnoreCase("discord")) {
                 if(args[1].equalsIgnoreCase("auth")) {
-                    DiscordAuth.AcceptAuthInfo(args[2], args[3]);
+                    DiscordAuth.AcceptAuthInfo(CommonUtils.Byte2String(args[2]), CommonUtils.Byte2String(args[3]));
                 }
             } else if(args[0].equalsIgnoreCase("keepalive")) {
-                String UUID = args[1];
+                String UUID = CommonUtils.Byte2String(args[1]);
                 BackendIO.KeepAlive(UUID, "BLABLABLA");
             } else {
                 System.out.println("[WARNING (REDIS)] WRONG COMMAND USAGE FROM REDIS" + " ( '" + k + "' )");
