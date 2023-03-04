@@ -6,7 +6,7 @@
 
     <groupId>com.itndev</groupId>
     <artifactId>Factions</artifactId>
-    <version>FRONTEND-1.7.7-STABLE</version>
+    <version>FRONTEND-1.7.8-STABLE</version>
     <packaging>jar</packaging>
 
     <name>Factions</name>
@@ -24,8 +24,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>

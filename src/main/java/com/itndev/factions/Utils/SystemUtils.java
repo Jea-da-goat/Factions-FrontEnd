@@ -343,7 +343,7 @@ public class SystemUtils {
     }
 
     public static void sendMainChat(String UUID, String Dformat) {
-        System.out.println(CommonUtils.String2Byte(UUID) + " " + CommonUtils.String2Byte(Dformat));
+        //System.out.println(CommonUtils.String2Byte(UUID) + " " + CommonUtils.String2Byte(Dformat));
         JedisTempStorage.AddCommandToQueue_INNER2(CommonUtils.String2Byte(UUID) + " " + CommonUtils.String2Byte(Dformat));
     }
 
